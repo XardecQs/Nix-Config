@@ -11,7 +11,9 @@
   "display": {
     "separator": " -> ",
     "bar": {
-      "charElapsed": "=",
+      "char": {
+        "elapsed": "="
+      },
       "charTotal": "-",
       "width": 12
     }

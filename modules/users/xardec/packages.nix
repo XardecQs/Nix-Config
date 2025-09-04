@@ -57,7 +57,9 @@ in
     switcheroo
     zenity
     ffmpegthumbnailer
+    jellyfin-ffmpeg
     vlc
+    menulibre
 
     # Multimedia and design
     krita
@@ -88,6 +90,7 @@ in
     vscode
     gthumb
     nixfmt-rfc-style
+    texliveMedium
 
     # Gaming and emulation
     wineWowPackages.stagingFull
@@ -128,6 +131,8 @@ in
     zapzap
     discord
     telegram-desktop
+    blender
+    waydroid
 
     (zen-browser.packages."${pkgs.system}".default)
   ];
