@@ -90,7 +90,7 @@ in
     vscode
     gthumb
     nixfmt-rfc-style
-    texliveMedium
+    texliveFull
 
     # Gaming and emulation
     wineWowPackages.stagingFull
@@ -133,6 +133,12 @@ in
     telegram-desktop
     blender
     waydroid
+    rustup
+    glibc.static
+    obs-studio
+    obs-studio-plugins.wlrobs
+    obs-studio-plugins.obs-pipewire-audio-capture
+    upx
 
     (zen-browser.packages."${pkgs.system}".default)
   ];

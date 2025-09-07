@@ -21,6 +21,9 @@
       autoload -U select-word-style
       select-word-style bash
 
+      eval "$(fzf --zsh)" 
+      eval "$(zoxide init --cmd cd zsh)"
+
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
       zstyle ':completion:*' menu no
       zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --color=always $realpath'
