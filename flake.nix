@@ -1,6 +1,6 @@
 # Flake configuration for NeoReaper system and xardec user
 {
-  description = "NeoReaper NixOS configuration with home-manager and Zen Browser";
+  description = "NeoReaper NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
