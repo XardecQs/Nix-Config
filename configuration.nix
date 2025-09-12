@@ -16,14 +16,22 @@
     networkmanager.enable = true;
   };
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.optimise.automatic = true;
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    auto-optimise-store = true;
+  };
+
+  nix.extraOptions = ''
+  warn-dirty = false
+'';
 
   # Boot
   boot = {
-    kernelPackages = pkgs.linuxPackages_testing;
+    kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       efi = {
         canTouchEfiVariables = true;
@@ -65,14 +73,13 @@
 
   # Servicios
   services = {
-    displayManager.gdm = {
-      enable = true;
-      wayland = true;
-    };
-    desktopManager.gnome.enable = true;
-
     xserver = {
       enable = true;
+      displayManager.gdm = {
+        enable = true;
+        wayland = true;
+      };
+      desktopManager.gnome.enable = true;
       desktopManager.xterm.enable = false;
       xkb.layout = "latam";
       videoDrivers = [ "intel" ];
@@ -254,6 +261,7 @@
         "wheel"
         "xardec"
         "libvirtd"
+        "dialout"
       ];
     };
 

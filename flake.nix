@@ -2,14 +2,15 @@
   description = "NeoReaper NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
   };
@@ -17,7 +18,8 @@
   outputs =
     {
       self,
-      nixpkgs,
+      nixpkgs-stable,
+      nixpkgs-unstable,
       home-manager,
       zen-browser,
       spicetify-nix,
@@ -25,12 +27,21 @@
     }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      unstable-overlay = final: prev: {
+        unstable = nixpkgs-unstable.legacyPackages.${system};
+      };
     in
     {
-      nixosConfigurations.NeoReaper = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.NeoReaper = nixpkgs-stable.lib.nixosSystem {
         inherit system;
         modules = [
+          (
+            { config, pkgs, ... }:
+            {
+              nixpkgs.overlays = [ unstable-overlay ];
+              nixpkgs.config.allowUnfree = true;
+            }
+          )
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -42,7 +53,6 @@
                 spicetify-nix.homeManagerModules.default
               ];
               _module.args = {
-                dotfilesDir = "/etc/nixos/modules/users/xardec/dotfiles";
                 zen-browser = zen-browser;
                 spicetify-nix = spicetify-nix;
               };
@@ -52,17 +62,21 @@
       };
 
       homeConfigurations."xardec" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        pkgs = nixpkgs-stable.legacyPackages.${system};
+        extraSpecialArgs = {
+          zen-browser = zen-browser;
+          spicetify-nix = spicetify-nix;
+        };
         modules = [
+          (
+            { config, pkgs, ... }:
+            {
+              nixpkgs.overlays = [ unstable-overlay ];
+              nixpkgs.config.allowUnfree = true;
+            }
+          )
           ./home.nix
           spicetify-nix.homeManagerModules.default
-          {
-            _module.args = {
-              dotfilesDir = "/etc/nixos/modules/users/xardec/dotfiles";
-              zen-browser = zen-browser;
-              spicetify-nix = spicetify-nix;
-            };
-          }
         ];
       };
     };

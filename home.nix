@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  dotfilesDir,
   zen-browser,
   spicetify-nix,
   ...
@@ -10,10 +9,17 @@
 
 let
   spicePkgs = spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  dotfiles = "${config.home.homeDirectory}/.dotfiles";
+  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
+  configs = {
+    nvim = "nvim";
+    kitty = "kitty";
+    fastfetch = "fastfetch";
+    zsh = "zsh";
+    user-dirs = "user-dirs.dirs";
+  };
 in
 {
-  nixpkgs.config.allowUnfree = true;
-
   home = {
     stateVersion = "25.05";
     username = "xardec";
@@ -21,15 +27,15 @@ in
   };
 
   # Archivos de configuración
+
+  xdg.configFile = builtins.mapAttrs (name: subpath: {
+    source = create_symlink "${dotfiles}/config/${subpath}";
+    recursive = true;
+  }) configs;
+
   home.file = {
-    ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/nvim";
-    ".config/kitty".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/kitty";
-    ".config/fastfetch".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/fastfetch";
-    ".vscode".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/vscode";
-    ".icons".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/icons";
-    ".config/zsh".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/zsh";
-    ".config/user-dirs.dirs".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/user-dirs.dirs";
+    ".vscode".source = create_symlink "${dotfiles}/homedots/vscode";
+    ".icons".source = create_symlink "${dotfiles}/homedots/icons";
   };
 
   # GNOME
@@ -260,7 +266,22 @@ in
 
   services.syncthing = {
     enable = true;
-    settings.options.urAccepted = -1;
+    settings = {
+      options.urAccepted = -1;
+      devices = {
+        "Redmi Note 10 Pro" = {
+          id = "C74GATB-E337PHR-EVNK36T-ZPDD4JY-I4HHD2K-MFVFPTK-36J2R7I-MHSBRQ2";
+        };
+      };
+      folders = {
+        "Kotatsu" = {
+          path = "/home/xardec/Media/Mangas/.Kotatsu";
+          devices = [
+            "Redmi Note 10 Pro"
+          ];
+        };
+      };
+    };
   };
 
   programs.spicetify = {
