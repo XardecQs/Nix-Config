@@ -1,15 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  #/----------/ general /----------/#
-  imports = [
-    ./hardware-configuration.nix
-    #./modules/system/boot.nix
-    #./modules/system/SysPakages.nix
-    #./modules/system/users.nix
-    #./modules/system/services.nix
-    #./modules/system/zsh.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   # Configuración básica del sistema
   system.stateVersion = "25.05";
@@ -17,7 +9,6 @@
   i18n.defaultLocale = "es_PE.UTF-8";
   console.keyMap = "la-latin1";
   nixpkgs.config.allowUnfree = true;
-  #system.autoUpgrade.enable = true;
 
   # Red
   networking = {
@@ -30,22 +21,7 @@
     "flakes"
   ];
 
-  virtualisation = {
-    waydroid.enable = true;
-    libvirtd = {
-      enable = true;
-      qemu = {
-        package = pkgs.qemu;
-        runAsRoot = false;
-        swtpm.enable = true;
-        ovmf = {
-          enable = true;
-          packages = [ pkgs.OVMFFull.fd ];
-        };
-      };
-    };
-  };
-  #/----------/ boot /----------/#
+  # Boot
   boot = {
     kernelPackages = pkgs.linuxPackages_testing;
     loader = {
@@ -60,24 +36,41 @@
         useOSProber = true;
       };
     };
-    plymouth = {
+    plymouth.enable = true;
+  };
+
+  # Virtualización
+  virtualisation = {
+    waydroid.enable = true;
+    libvirtd = {
       enable = true;
+      qemu = {
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [ pkgs.OVMFFull.fd ];
+        };
+      };
     };
   };
-  #/----------/ services /----------/#
 
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
+  # Hardware
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+    cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
   };
 
+  # Servicios
   services = {
     displayManager.gdm = {
       enable = true;
       wayland = true;
     };
     desktopManager.gnome.enable = true;
-    #xserver.desktopManager.cinnamon.enable = true;
+
     xserver = {
       enable = true;
       desktopManager.xterm.enable = false;
@@ -94,7 +87,7 @@
 
     printing = {
       enable = true;
-      drivers = [ pkgs.epson-escpr ];
+      drivers = [ pkgs.epson-escpr2 ];
     };
 
     locate = {
@@ -115,43 +108,50 @@
 
   security.rtkit.enable = true;
 
-  #/----------/ paquetes del sistema /----------/#
-
+  # Paquetes del sistema
   environment.systemPackages = with pkgs; [
-    fzf
-    zoxide
-    lsd
+    # Herramientas básicas
     git
     wget
     neovim
     btrfs-progs
     gparted
     openssh
+    tree
+    bindfs
+
+    # Utilidades del sistema
+    fzf
+    zoxide
+    lsd
     fastfetch
     kitty
     cups
     epson-escpr2
-    tree
     gdu
     yazi
     syncthing
-    bindfs
 
+    # Nautilus
     nautilus-python
     nautilus-open-any-terminal
 
+    # ZSH
     zsh
     zsh-autosuggestions
     zsh-syntax-highlighting
     zsh-fzf-tab
 
+    # Desarrollo
     gcc
     binutils
     gnumake
     cmake
 
+    # Juegos
     gamemode
 
+    # Virtualización
     virt-manager
     virt-viewer
     spice
@@ -165,6 +165,7 @@
     swtpm
   ];
 
+  # Programas
   programs = {
     kdeconnect = {
       enable = true;
@@ -181,9 +182,66 @@
       enable = true;
       terminal = "kitty";
     };
-  };
-  #/----------/ usuarios /----------/#
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestions.enable = true;
+      syntaxHighlighting.enable = true;
 
+      interactiveShellInit = ''
+        source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+        source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
+        source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+        source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+        HISTSIZE=10000
+        HISTFILE=~/.local/share/zsh/history
+        SAVEHIST=$HISTSIZE
+
+        autoload -U select-word-style
+        select-word-style bash
+
+        zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+        zstyle ':completion:*' menu no
+        zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.lsd}/bin/lsd --color=always $realpath'
+        zstyle ':fzf-tab:*' fzf-flags --height=55% --border
+
+        bindkey '^[[1;5C' forward-word
+        bindkey '^[[1;5D' backward-word
+        bindkey '^H' backward-kill-word
+        bindkey "^[[3~" delete-char
+
+        [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
+      '';
+
+      shellAliases = {
+        lla = "lsd -la";
+        la = "lsd -a";
+        ll = "lsd -l";
+        ls = "lsd";
+        q = "exit";
+        c = "clear";
+        ".." = "cd ..";
+        "..." = "cd ../..";
+        cf = "clear && fastfetch";
+        cff = "clear && fastfetch --config /etc/nixos/modules/users/xardec/dotfiles/config/fastfetch/13-custom.jsonc";
+        snvim = "sudo nvim";
+        ordenar = "~/Proyectos/Scripts/sh/ordenar.sh";
+        desordenar = "~/Proyectos/Scripts/sh/desordenar.sh";
+        cp = "cp --reflink=auto";
+        umatrix = "unimatrix -s 95 -f";
+        grep = "grep --color=auto";
+        diff = "diff --color=auto";
+        syu = "yay -Syu";
+        codepwd = ''code "$(pwd)"'';
+        napwd = ''nautilus "$(pwd)" &> /dev/null & disown'';
+        dots = "cd ~/.dotfiles && codepwd && q";
+        dotsn = "cd ~/.dotfiles && nvim";
+      };
+    };
+  };
+
+  # Usuarios
   users = {
     defaultUserShell = pkgs.zsh;
     users.root.shell = pkgs.zsh;
@@ -195,76 +253,14 @@
         "networkmanager"
         "wheel"
         "xardec"
+        "libvirtd"
       ];
     };
 
-    groups = {
-      libvirtd.members = [ "xardec" ];
-      xardec = {
-        name = "xardec";
-        gid = 1000;
-        members = [ "xardec" ];
-      };
-    };
-  };
-
-  #/----------/ zsh /----------/#
-
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    autosuggestions.enable = true;
-    syntaxHighlighting.enable = true;
-
-    interactiveShellInit = ''
-      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
-      source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-      source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-      HISTSIZE=10000
-      HISTFILE=~/.local/share/zsh/history
-      SAVEHIST=$HISTSIZE
-
-      autoload -U select-word-style
-      select-word-style bash
-
-      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-      zstyle ':completion:*' menu no
-      zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.lsd}/bin/lsd --color=always $realpath'
-      zstyle ':fzf-tab:*' fzf-flags --height=55% --border
-
-      bindkey '^[[1;5C' forward-word
-      bindkey '^[[1;5D' backward-word
-      bindkey '^H' backward-kill-word
-      bindkey "^[[3~" delete-char
-
-      [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
-    '';
-
-    shellAliases = {
-      lla = "lsd -la";
-      la = "lsd -a";
-      ll = "lsd -l";
-      ls = "lsd";
-      q = "exit";
-      c = "clear";
-      ".." = "cd ..";
-      "..." = "cd ../..";
-      cf = "clear && fastfetch";
-      cff = "clear && fastfetch --config /etc/nixos/modules/users/xardec/dotfiles/config/fastfetch/13-custom.jsonc";
-      snvim = "sudo nvim";
-      ordenar = "~/Proyectos/Scripts/sh/ordenar.sh";
-      desordenar = "~/Proyectos/Scripts/sh/desordenar.sh";
-      cp = "cp --reflink=auto";
-      umatrix = "unimatrix -s 95 -f";
-      grep = "grep --color=auto";
-      diff = "diff --color=auto";
-      syu = "yay -Syu";
-      codepwd = ''code "$(pwd)"'';
-      napwd = ''nautilus "$(pwd)" &> /dev/null & disown'';
-      dots = "cd ~/.dotfiles && codepwd && q";
-      dotsn = "cd ~/.dotfiles && nvim";
+    groups.xardec = {
+      name = "xardec";
+      gid = 1000;
+      members = [ "xardec" ];
     };
   };
 }

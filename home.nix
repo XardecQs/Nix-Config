@@ -11,19 +11,8 @@
 let
   spicePkgs = spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
-
 {
-
-  #/----------/ general /----------/#
-
   nixpkgs.config.allowUnfree = true;
-
-  #imports = [
-  #  ./modules/users/xardec/packages.nix
-  #  ./modules/users/xardec/zsh.nix
-  #  ./modules/users/xardec/gnome.nix
-  #  ./modules/users/xardec/files.nix
-  #];
 
   home = {
     stateVersion = "25.05";
@@ -31,32 +20,25 @@ in
     homeDirectory = "/home/xardec";
   };
 
-  #/----------/ archivos /----------/#
-
+  # Archivos de configuración
   home.file = {
     ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/nvim";
     ".config/kitty".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/kitty";
     ".config/fastfetch".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/fastfetch";
     ".vscode".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/vscode";
     ".icons".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/icons";
-    #".local/share/fonts".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/fonts";
     ".config/zsh".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/zsh";
     ".config/user-dirs.dirs".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/config/user-dirs.dirs";
   };
 
-  #/----------/ gnome /----------/#
-
+  # GNOME
   services.gnome-keyring.enable = true;
 
   gtk = {
     enable = true;
-    iconTheme = {
-      name = "Definitivo";
-    };
-    cursorTheme = {
-      name = "MacOS-Tahoe-Cursor";
-    };
+    iconTheme.name = "Definitivo";
+    cursorTheme.name = "MacOS-Tahoe-Cursor";
     theme = {
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
@@ -65,10 +47,10 @@ in
 
   qt = {
     enable = true;
-    platformTheme = "gnome";
+    platformTheme.name = "adwaita";
     style = {
       name = "Adwaita-dark";
-      package = pkgs.gnome-themes-extra;
+      package = pkgs.adwaita-qt6;
     };
   };
 
@@ -163,17 +145,13 @@ in
     };
   };
 
-  #/----------/ paquetes /----------/#
-
+  # Paquetes de usuario
   home.packages = with pkgs; [
     # CLI tools
     bat
     btop
     eza
-    fastfetch
     fzf
-    lsd
-    zoxide
     ripgrep
     fd
     unzip
@@ -181,12 +159,11 @@ in
     unimatrix
     tmux
     dpkg
-    tree
     zsh-powerlevel10k
     jp2a
     libicns
 
-    # Desktop environment tools
+    # Desktop environment
     gnome-tweaks
     gnome-extension-manager
     gnomeExtensions.gsconnect
@@ -202,11 +179,8 @@ in
     gnomeExtensions.tray-icons-reloaded
     gnomeExtensions.emoji-copy
     gnomeExtensions.logo-menu
-
     dconf-editor
-    kitty
     github-desktop
-    adw-gtk3
     switcheroo
     zenity
     ffmpegthumbnailer
@@ -223,17 +197,11 @@ in
     nerd-fonts.jetbrains-mono
     papirus-icon-theme
     marble-shell-theme
-    adwaita-qt6
 
     # Development tools
     nodejs
     python3
-
-    # Nix management
     home-manager
-
-    # Printer drivers
-    epson-escpr2
 
     # Containerization
     podman
@@ -249,7 +217,6 @@ in
     # Gaming and emulation
     wineWowPackages.stagingFull
     winetricks
-    steam
     lutris
     mangohud
     protonup
@@ -259,15 +226,6 @@ in
     # Virtualization
     virt-manager
     virt-viewer
-    spice
-    spice-gtk
-    spice-protocol
-    win-virtio
-    win-spice
-    freerdp
-    qemu
-    libvirt
-    swtpm
 
     # AI and image processing
     realcugan-ncnn-vulkan
@@ -275,7 +233,6 @@ in
 
     # Media
     youtube-music
-    #spotify
 
     # Miscellaneous
     icoextract
@@ -296,17 +253,14 @@ in
     arduino
     gnome-network-displays
     hydralauncher
+    cava
 
     (zen-browser.packages."${pkgs.system}".default)
   ];
 
   services.syncthing = {
     enable = true;
-    settings = {
-      options = {
-        urAccepted = -1;
-      };
-    };
+    settings.options.urAccepted = -1;
   };
 
   programs.spicetify = {
@@ -325,10 +279,8 @@ in
     ];
   };
 
-  #/----------/ zsh /----------/#
-
+  # ZSH
   programs.zsh = {
-
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
@@ -337,7 +289,6 @@ in
     initContent = ''
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
-      # source ${dotfilesDir}/zshrc
 
       autoload -U select-word-style
       select-word-style bash
@@ -349,8 +300,6 @@ in
       zstyle ':completion:*' menu no
       zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --color=always $realpath'
       zstyle ':fzf-tab:*' fzf-flags --height=55% --border
-
-      #/--------------------/ atajos de teclado /--------------------/#
 
       bindkey '^[[1;5C' forward-word
       bindkey '^[[1;5D' backward-word
@@ -402,5 +351,4 @@ in
       }
     ];
   };
-
 }
