@@ -137,7 +137,6 @@
     epson-escpr2
     gdu
     yazi
-    syncthing
 
     # Nautilus
     nautilus-python

@@ -12,11 +12,18 @@ let
   dotfiles = "${config.home.homeDirectory}/.dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
-    nvim = "nvim";
-    kitty = "kitty";
-    fastfetch = "fastfetch";
-    zsh = "zsh";
-    user-dirs = "user-dirs.dirs";
+    # --------------- #
+    # final = origen; #
+    # --------------- #
+    # ----- config ----- #
+    ".config/nvim" = "config/nvim";
+    ".config/kitty" = "config/kitty";
+    ".config/fastfetch" = "config/fastfetch";
+    ".config/zsh" = "config/zsh";
+    ".config/user-dirs.dirs" = "config/user-dirs.dirs";
+    # ----- homedots ----- #
+    ".icons" = "homedots/icons";
+    ".vscode" = "homedots/vscode";
   };
 in
 {
@@ -28,15 +35,15 @@ in
 
   # Archivos de configuración
 
-  xdg.configFile = builtins.mapAttrs (name: subpath: {
-    source = create_symlink "${dotfiles}/config/${subpath}";
+  home.file = builtins.mapAttrs (name: subpath: {
+    source = create_symlink "${dotfiles}/${subpath}";
     recursive = true;
   }) configs;
 
-  home.file = {
-    ".vscode".source = create_symlink "${dotfiles}/homedots/vscode";
-    ".icons".source = create_symlink "${dotfiles}/homedots/icons";
-  };
+  #home.file = {
+  #  ".vscode".source = create_symlink "${dotfiles}/homedots/vscode";
+  #  ".icons".source = create_symlink "${dotfiles}/homedots/icons";
+  #};
 
   # GNOME
   services.gnome-keyring.enable = true;
@@ -244,7 +251,6 @@ in
     icoextract
     android-tools
     alsa-utils
-    syncthing
     zapzap
     discord
     telegram-desktop
@@ -266,6 +272,7 @@ in
 
   services.syncthing = {
     enable = true;
+    extraOptions = [ "--allow-newer-config" ];
     settings = {
       options.urAccepted = -1;
       devices = {
@@ -276,6 +283,14 @@ in
       folders = {
         "Kotatsu" = {
           path = "/home/xardec/Media/Mangas/.Kotatsu";
+          id = "tovx9-9995f";
+          devices = [
+            "Redmi Note 10 Pro"
+          ];
+        };
+        "Música" = {
+          path = "/home/xardec/Media/Música";
+          id = "w9yjz-9kb76";
           devices = [
             "Redmi Note 10 Pro"
           ];
