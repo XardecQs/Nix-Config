@@ -91,7 +91,7 @@
     };
 
     "/home/xardec/.local/share/fonts" = {
-      device = "/etc/nixos/modules/users/xardec/dotfiles/fonts";
+      device = "/usr/share/fonts";
       fsType = "fuse.bindfs";
     };
   };

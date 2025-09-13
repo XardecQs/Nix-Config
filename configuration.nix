@@ -8,26 +8,31 @@
   time.timeZone = "America/Lima";
   i18n.defaultLocale = "es_PE.UTF-8";
   console.keyMap = "la-latin1";
+
+  # Gestión de paquetes y store
   nixpkgs.config.allowUnfree = true;
+  nix = {
+    optimise.automatic = true;
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+      auto-optimise-store = true;
+      warn-dirty = false;
+    };
+  };
 
   # Red
   networking = {
     hostName = "NeoReaper";
     networkmanager.enable = true;
   };
-
-  nix.optimise.automatic = true;
-  nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    auto-optimise-store = true;
-  };
-
-  nix.extraOptions = ''
-  warn-dirty = false
-'';
 
   # Boot
   boot = {
@@ -90,6 +95,7 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      wireplumber.enable = true; # Explicit for advanced audio routing
     };
 
     printing = {
@@ -100,7 +106,7 @@
     locate = {
       enable = true;
       package = pkgs.plocate;
-      interval = "daily";
+      interval = "hourly";
       prunePaths = [
         "/tmp"
         "/var/tmp"
@@ -115,60 +121,30 @@
 
   security.rtkit.enable = true;
 
-  # Paquetes del sistema
+  # Paquetes mínimos del sistema
   environment.systemPackages = with pkgs; [
-    # Herramientas básicas
-    git
-    wget
-    neovim
+    # Herramientas esenciales
     btrfs-progs
     gparted
-    openssh
-    tree
     bindfs
+    kitty
 
-    # Utilidades del sistema
+    wget
+    neovim
+    bat
+    btop
     fzf
+    fd
+    unzip
+    wl-clipboard
+    unimatrix
+    tmux
+    zsh-powerlevel10k
     zoxide
     lsd
     fastfetch
-    kitty
-    cups
-    epson-escpr2
     gdu
     yazi
-
-    # Nautilus
-    nautilus-python
-    nautilus-open-any-terminal
-
-    # ZSH
-    zsh
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    zsh-fzf-tab
-
-    # Desarrollo
-    gcc
-    binutils
-    gnumake
-    cmake
-
-    # Juegos
-    gamemode
-
-    # Virtualización
-    virt-manager
-    virt-viewer
-    spice
-    spice-gtk
-    spice-protocol
-    win-virtio
-    win-spice
-    freerdp
-    qemu
-    libvirt
-    swtpm
   ];
 
   # Programas
@@ -193,19 +169,32 @@
       enableCompletion = true;
       autosuggestions.enable = true;
       syntaxHighlighting.enable = true;
-
+      shellAliases = {
+        lla = "lsd -la";
+        la = "lsd -a";
+        ll = "lsd -l";
+        ls = "lsd";
+        q = "exit";
+        c = "clear";
+        ".." = "cd ..";
+        "..." = "cd ../..";
+        cf = "clear && fastfetch";
+        cff = "clear && fastfetch --config /home/xardec/.dotfiles/config/fastfetch/13-custom.jsonc";
+        cp = "cp --reflink=auto";
+        umatrix = "unimatrix -s 95 -f";
+        grep = "grep --color=auto";
+        diff = "diff --color=auto";
+      };
+      histFile = "$HOME/.local/share/zsh/history";
+      histSize = 10000;
       interactiveShellInit = ''
         source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-        source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
-        source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-        source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-        HISTSIZE=10000
-        HISTFILE=~/.local/share/zsh/history
-        SAVEHIST=$HISTSIZE
 
         autoload -U select-word-style
         select-word-style bash
+
+        eval "$(fzf --zsh)"
+        eval "$(zoxide init --cmd cd zsh)"
 
         zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
         zstyle ':completion:*' menu no
@@ -219,31 +208,6 @@
 
         [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
       '';
-
-      shellAliases = {
-        lla = "lsd -la";
-        la = "lsd -a";
-        ll = "lsd -l";
-        ls = "lsd";
-        q = "exit";
-        c = "clear";
-        ".." = "cd ..";
-        "..." = "cd ../..";
-        cf = "clear && fastfetch";
-        cff = "clear && fastfetch --config /etc/nixos/modules/users/xardec/dotfiles/config/fastfetch/13-custom.jsonc";
-        snvim = "sudo nvim";
-        ordenar = "~/Proyectos/Scripts/sh/ordenar.sh";
-        desordenar = "~/Proyectos/Scripts/sh/desordenar.sh";
-        cp = "cp --reflink=auto";
-        umatrix = "unimatrix -s 95 -f";
-        grep = "grep --color=auto";
-        diff = "diff --color=auto";
-        syu = "yay -Syu";
-        codepwd = ''code "$(pwd)"'';
-        napwd = ''nautilus "$(pwd)" &> /dev/null & disown'';
-        dots = "cd ~/.dotfiles && codepwd && q";
-        dotsn = "cd ~/.dotfiles && nvim";
-      };
     };
   };
 
@@ -251,23 +215,15 @@
   users = {
     defaultUserShell = pkgs.zsh;
     users.root.shell = pkgs.zsh;
-
     users.xardec = {
       isNormalUser = true;
       description = "Xavier Del Piero";
       extraGroups = [
         "networkmanager"
         "wheel"
-        "xardec"
         "libvirtd"
         "dialout"
       ];
-    };
-
-    groups.xardec = {
-      name = "xardec";
-      gid = 1000;
-      members = [ "xardec" ];
     };
   };
 }

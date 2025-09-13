@@ -12,16 +12,12 @@ let
   dotfiles = "${config.home.homeDirectory}/.dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
-    # --------------- #
     # final = origen; #
-    # --------------- #
-    # ----- config ----- #
     ".config/nvim" = "config/nvim";
     ".config/kitty" = "config/kitty";
     ".config/fastfetch" = "config/fastfetch";
     ".config/zsh" = "config/zsh";
     ".config/user-dirs.dirs" = "config/user-dirs.dirs";
-    # ----- homedots ----- #
     ".icons" = "homedots/icons";
     ".vscode" = "homedots/vscode";
   };
@@ -34,19 +30,14 @@ in
   };
 
   # Archivos de configuración
-
   home.file = builtins.mapAttrs (name: subpath: {
     source = create_symlink "${dotfiles}/${subpath}";
     recursive = true;
   }) configs;
 
-  #home.file = {
-  #  ".vscode".source = create_symlink "${dotfiles}/homedots/vscode";
-  #  ".icons".source = create_symlink "${dotfiles}/homedots/icons";
-  #};
-
   # GNOME
   services.gnome-keyring.enable = true;
+  services.syncthing.tray.enable = true; # System tray for Syncthing
 
   gtk = {
     enable = true;
@@ -56,6 +47,7 @@ in
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
     };
+    font.name = "JetBrains Mono 10"; # Consistent font
   };
 
   qt = {
@@ -73,30 +65,27 @@ in
       color-scheme = "prefer-dark";
       gtk-theme = "adw-gtk3-dark";
     };
-
+    "org/gnome/shell" = {
+      enabled-extensions = with pkgs.gnomeExtensions; [
+        maximize-to-empty-workspace-2025.extensionUuid
+        dash-to-dock.extensionUuid
+        show-desktop-button.extensionUuid
+        user-themes.extensionUuid
+        gsconnect.extensionUuid
+        blur-my-shell.extensionUuid
+        gtk4-desktop-icons-ng-ding.extensionUuid
+        rounded-window-corners-reborn.extensionUuid
+        clipboard-indicator.extensionUuid
+        fullscreen-hot-corner.extensionUuid
+        caffeine.extensionUuid
+        tray-icons-reloaded.extensionUuid
+        emoji-copy.extensionUuid
+        logo-menu.extensionUuid
+      ];
+    };
     "org/gnome/shell/extensions/user-theme" = {
       name = "Marble-blue-dark";
     };
-
-    "org/gnome/shell" = {
-      enabled-extensions = with pkgs.gnomeExtensions; [
-        "MaximizeToEmptyWorkspace-extension@kovari.cc"
-        "dash-to-dock@micxgx.gmail.com"
-        "show-desktop-button@amivaleo"
-        "user-theme@gnome-shell-extensions.gcampax.github.com"
-        "gsconnect@andyholmes.github.io"
-        "blur-my-shell@aunetx"
-        "gtk4-ding@smedius.gitlab.com"
-        "rounded-window-corners@fxgn"
-        "clipboard-indicator@tudmotu.com"
-        "fullscreen-hot-corner@sorrow.about.alice.pm.me"
-        "caffeine@patapon.info"
-        "trayIconsReloaded@selfmade.pl"
-        "emoji-copy@felipeftn"
-        "logomenu@aryan_k"
-      ];
-    };
-
     "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
@@ -104,25 +93,21 @@ in
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
       ];
     };
-
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       name = "Open Kitty";
       command = "kitty";
       binding = "<Super>q";
     };
-
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       name = "Open Nautilus";
       command = "nautilus";
       binding = "<Super>e";
     };
-
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
-      name = "walpaper aleatorio";
+      name = "wallpaper aleatorio";
       command = "/home/xardec/Proyectos/Scripts/sh/gnome-wallpaper.sh 'Imagen aleatoria'";
       binding = "<Super><Shift>w";
     };
-
     "org/gnome/shell/keybindings" = {
       switch-to-application-1 = [ ];
       switch-to-application-2 = [ ];
@@ -134,7 +119,6 @@ in
       switch-to-application-8 = [ ];
       switch-to-application-9 = [ ];
     };
-
     "org/gnome/desktop/wm/keybindings" = {
       close = [ "<Super>c" ];
       switch-to-workspace-1 = [ "<Super>1" ];
@@ -161,22 +145,28 @@ in
   # Paquetes de usuario
   home.packages = with pkgs; [
     # CLI tools
+    git
+    wget
+    neovim
     bat
     btop
-    eza
     fzf
-    ripgrep
     fd
     unzip
     wl-clipboard
     unimatrix
     tmux
-    dpkg
     zsh-powerlevel10k
     jp2a
     libicns
+    zoxide
+    lsd
+    fastfetch
+    gdu
+    yazi
 
     # Desktop environment
+    kitty
     gnome-tweaks
     gnome-extension-manager
     gnomeExtensions.gsconnect
@@ -200,6 +190,8 @@ in
     jellyfin-ffmpeg
     vlc
     menulibre
+    nautilus-python
+    nautilus-open-any-terminal
 
     # Multimedia and design
     krita
@@ -212,9 +204,15 @@ in
     marble-shell-theme
 
     # Development tools
+    gcc
+    binutils
+    gnumake
+    cmake
     nodejs
     python3
     home-manager
+    nixfmt-rfc-style
+    texliveFull
 
     # Containerization
     podman
@@ -223,8 +221,6 @@ in
     # Development and utilities
     vscode
     gthumb
-    nixfmt-rfc-style
-    texliveFull
     onlyoffice-desktopeditors
 
     # Gaming and emulation
@@ -235,10 +231,20 @@ in
     protonup
     prismlauncher
     mcaselector
+    gamemode
 
     # Virtualization
     virt-manager
     virt-viewer
+    spice
+    spice-gtk
+    spice-protocol
+    win-virtio
+    win-spice
+    freerdp
+    qemu
+    libvirt
+    swtpm
 
     # AI and image processing
     realcugan-ncnn-vulkan
@@ -270,6 +276,7 @@ in
     (zen-browser.packages."${pkgs.system}".default)
   ];
 
+  # Syncthing
   services.syncthing = {
     enable = true;
     extraOptions = [ "--allow-newer-config" ];
@@ -284,21 +291,18 @@ in
         "Kotatsu" = {
           path = "/home/xardec/Media/Mangas/.Kotatsu";
           id = "tovx9-9995f";
-          devices = [
-            "Redmi Note 10 Pro"
-          ];
+          devices = [ "Redmi Note 10 Pro" ];
         };
         "Música" = {
           path = "/home/xardec/Media/Música";
           id = "w9yjz-9kb76";
-          devices = [
-            "Redmi Note 10 Pro"
-          ];
+          devices = [ "Redmi Note 10 Pro" ];
         };
       };
     };
   };
 
+  # Spicetify
   programs.spicetify = {
     enable = true;
     alwaysEnableDevTools = true;
@@ -324,17 +328,16 @@ in
 
     initContent = ''
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
+
+      eval "$(fzf --zsh)"
+      eval "$(zoxide init --cmd cd zsh)"
 
       autoload -U select-word-style
       select-word-style bash
 
-      eval "$(fzf --zsh)" 
-      eval "$(zoxide init --cmd cd zsh)"
-
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
       zstyle ':completion:*' menu no
-      zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --color=always $realpath'
+      zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.lsd}/bin/lsd --color=always $realpath'
       zstyle ':fzf-tab:*' fzf-flags --height=55% --border
 
       bindkey '^[[1;5C' forward-word
@@ -355,7 +358,7 @@ in
       ".." = "cd ..";
       "..." = "cd ../..";
       cf = "clear && fastfetch";
-      cff = "clear && fastfetch --config /etc/nixos/modules/users/xardec/dotfiles/config/fastfetch/13-custom.jsonc";
+      cff = "clear && fastfetch --config /home/xardec/.dotfiles/config/fastfetch/13-custom.jsonc";
       snvim = "sudo nvim";
       ordenar = "~/Proyectos/Scripts/sh/ordenar.sh";
       desordenar = "~/Proyectos/Scripts/sh/desordenar.sh";
@@ -366,8 +369,6 @@ in
       syu = "yay -Syu";
       codepwd = ''code "$(pwd)"'';
       napwd = ''nautilus "$(pwd)" &> /dev/null & disown'';
-      dots = "cd ~/.dotfiles && codepwd && q";
-      dotsn = "cd ~/.dotfiles && nvim";
     };
 
     history = {
@@ -375,16 +376,5 @@ in
       save = 10000;
       path = "${config.xdg.dataHome}/zsh/history";
     };
-
-    plugins = [
-      {
-        name = "zsh-autosuggestions";
-        src = pkgs.zsh-autosuggestions.outPath;
-      }
-      {
-        name = "zsh-syntax-highlighting";
-        src = pkgs.zsh-syntax-highlighting.outPath;
-      }
-    ];
   };
 }

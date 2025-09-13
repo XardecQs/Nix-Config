@@ -35,13 +35,11 @@
       nixosConfigurations.NeoReaper = nixpkgs-stable.lib.nixosSystem {
         inherit system;
         modules = [
-          (
-            { config, pkgs, ... }:
-            {
-              nixpkgs.overlays = [ unstable-overlay ];
-              nixpkgs.config.allowUnfree = true;
-            }
-          )
+          # Configuración global de Nixpkgs
+          {
+            nixpkgs.overlays = [ unstable-overlay ];
+            nixpkgs.config.allowUnfree = true;
+          }
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -53,8 +51,7 @@
                 spicetify-nix.homeManagerModules.default
               ];
               _module.args = {
-                zen-browser = zen-browser;
-                spicetify-nix = spicetify-nix;
+                inherit zen-browser spicetify-nix;
               };
             };
           }
@@ -64,17 +61,13 @@
       homeConfigurations."xardec" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs-stable.legacyPackages.${system};
         extraSpecialArgs = {
-          zen-browser = zen-browser;
-          spicetify-nix = spicetify-nix;
+          inherit zen-browser spicetify-nix;
         };
         modules = [
-          (
-            { config, pkgs, ... }:
-            {
-              nixpkgs.overlays = [ unstable-overlay ];
-              nixpkgs.config.allowUnfree = true;
-            }
-          )
+          {
+            nixpkgs.overlays = [ unstable-overlay ];
+            nixpkgs.config.allowUnfree = true;
+          }
           ./home.nix
           spicetify-nix.homeManagerModules.default
         ];
