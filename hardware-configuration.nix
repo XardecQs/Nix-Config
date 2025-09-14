@@ -89,11 +89,6 @@
         "space_cache=v2"
       ];
     };
-
-    "/home/xardec/.local/share/fonts" = {
-      device = "/usr/share/fonts";
-      fsType = "fuse.bindfs";
-    };
   };
 
   swapDevices = [

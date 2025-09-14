@@ -189,12 +189,13 @@
       histSize = 10000;
       interactiveShellInit = ''
         source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+        source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
+
+        source <(fzf --zsh)
+        eval "$(zoxide init --cmd cd zsh)"
 
         autoload -U select-word-style
         select-word-style bash
-
-        eval "$(fzf --zsh)"
-        eval "$(zoxide init --cmd cd zsh)"
 
         zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
         zstyle ':completion:*' menu no
@@ -223,6 +224,83 @@
         "wheel"
         "libvirtd"
         "dialout"
+        "waydroid"
+      ];
+    };
+    users.waydroid-xardec = {
+      isSystemUser = true;
+      uid = 10121;
+      group = "waydroid";
+      description = "xardec en Waydroid";
+      home = "/var/empty";
+      shell = "/run/current-system/sw/bin/nologin";
+    };
+    users.waydroid-root = {
+      isSystemUser = true;
+      uid = 1023;
+      group = "waydroid";
+      description = "root de Waydroid";
+      home = "/var/empty";
+      shell = "/run/current-system/sw/bin/nologin";
+    };
+    groups.waydroid = {
+      gid = 1023;
+    };
+  };
+
+  fileSystems = {
+
+    "/home/xardec/.local/share/fonts" = {
+      device = "/usr/share/fonts";
+      fsType = "fuse.bindfs";
+    };
+
+    "/home/xardec/.local/share/waydroid/data/media/0/Download" = {
+      device = "/home/xardec/Descargas";
+      fsType = "fuse.bindfs";
+      options = [
+        "uid=waydroid-xardec"
+        "gid=waydroid"
+        "create-for-user=xardec"
+        "create-for-group=users"
+        "user"
+        "nofail"
+      ];
+    };
+    "/home/xardec/.local/share/waydroid/data/media/0/Music" = {
+      device = "/home/xardec/Media/Música";
+      fsType = "fuse.bindfs";
+      options = [
+        "uid=waydroid-xardec"
+        "gid=waydroid"
+        "create-for-user=xardec"
+        "create-for-group=users"
+        "user"
+        "nofail"
+      ];
+    };
+    "/home/xardec/.local/share/waydroid/data/media/0/Documents" = {
+      device = "/home/xardec/Documentos";
+      fsType = "fuse.bindfs";
+      options = [
+        "uid=waydroid-xardec"
+        "gid=waydroid"
+        "create-for-user=xardec"
+        "create-for-group=users"
+        "user"
+        "nofail"
+      ];
+    };
+    "/home/xardec/.local/share/waydroid/data/media/0/Android/data/org.koitharu.kotatsu/files/manga" = {
+      device = "/home/xardec/Media/Mangas/.Kotatsu";
+      fsType = "fuse.bindfs";
+      options = [
+        "uid=10129"
+        "gid=1078"
+        "create-for-user=xardec"
+        "create-for-group=users"
+        "user"
+        "nofail"
       ];
     };
   };

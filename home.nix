@@ -37,7 +37,6 @@ in
 
   # GNOME
   services.gnome-keyring.enable = true;
-  services.syncthing.tray.enable = true; # System tray for Syncthing
 
   gtk = {
     enable = true;
@@ -47,7 +46,7 @@ in
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
     };
-    font.name = "JetBrains Mono 10"; # Consistent font
+    font.name = "SF Pro Display";
   };
 
   qt = {
@@ -151,6 +150,7 @@ in
     bat
     btop
     fzf
+    zsh-fzf-tab
     fd
     unzip
     wl-clipboard
@@ -262,6 +262,7 @@ in
     telegram-desktop
     blender
     waydroid
+    waydroid-helper
     rustup
     glibc.static
     obs-studio
@@ -328,8 +329,9 @@ in
 
     initContent = ''
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+      source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
 
-      eval "$(fzf --zsh)"
+      source <(fzf --zsh)
       eval "$(zoxide init --cmd cd zsh)"
 
       autoload -U select-word-style
@@ -369,6 +371,7 @@ in
       syu = "yay -Syu";
       codepwd = ''code "$(pwd)"'';
       napwd = ''nautilus "$(pwd)" &> /dev/null & disown'';
+      nix-shell = "nix-shell --command zsh";
     };
 
     history = {
