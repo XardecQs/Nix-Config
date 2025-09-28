@@ -11,6 +11,7 @@
 
   # Gestión de paquetes y store
   nixpkgs.config.allowUnfree = true;
+  
   nix = {
     optimise.automatic = true;
     gc = {
@@ -131,6 +132,7 @@
 
     wget
     neovim
+    tree
     bat
     btop
     fzf
@@ -173,6 +175,7 @@
         lla = "lsd -la";
         la = "lsd -a";
         ll = "lsd -l";
+        l1 = "lsd -1";
         ls = "lsd";
         q = "exit";
         c = "clear";

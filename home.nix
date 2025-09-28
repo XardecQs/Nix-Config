@@ -270,10 +270,16 @@ in
     obs-studio-plugins.obs-pipewire-audio-capture
     upx
     arduino
+    arduino-cli
     gnome-network-displays
     hydralauncher
     cava
-
+    gapless
+    desktop-file-utils
+    resources
+    anki
+    obsidian
+    
     (zen-browser.packages."${pkgs.system}".default)
   ];
 
@@ -297,6 +303,11 @@ in
         "Música" = {
           path = "/home/xardec/Media/Música";
           id = "w9yjz-9kb76";
+          devices = [ "Redmi Note 10 Pro" ];
+        };
+        "Capturas de pantalla" = {
+          path = "/home/xardec/Media/Imágenes/Capturas de pantalla";
+          id = "7979p-4pjv5";
           devices = [ "Redmi Note 10 Pro" ];
         };
       };
@@ -354,6 +365,7 @@ in
       lla = "lsd -la";
       la = "lsd -a";
       ll = "lsd -l";
+      l1 = "lsd -1";
       ls = "lsd";
       q = "exit";
       c = "clear";
