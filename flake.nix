@@ -27,8 +27,10 @@
     }:
     let
       system = "x86_64-linux";
-      unstable-overlay = final: prev: {
-        unstable = nixpkgs-unstable.legacyPackages.${system};
+      unstable-overlay = final: _prev: {
+        unstable = import nixpkgs-unstable {
+          inherit (final) system config; # Hereda system y config (incluye allowUnfree)
+        };
       };
     in
     {

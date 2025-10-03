@@ -188,7 +188,6 @@ in
     zenity
     ffmpegthumbnailer
     jellyfin-ffmpeg
-    vlc
     menulibre
     nautilus-python
     nautilus-open-any-terminal
@@ -196,7 +195,6 @@ in
     # Multimedia and design
     krita
     inkscape
-    firefox
 
     # Themes
     nerd-fonts.jetbrains-mono
@@ -219,7 +217,7 @@ in
     distrobox
 
     # Development and utilities
-    vscode
+    unstable.vscode
     gthumb
     onlyoffice-desktopeditors
 
@@ -229,7 +227,7 @@ in
     lutris
     mangohud
     protonup
-    prismlauncher
+    unstable.prismlauncher
     mcaselector
     gamemode
 
@@ -279,8 +277,11 @@ in
     resources
     anki
     obsidian
+    showtime
     
+    firefox
     (zen-browser.packages."${pkgs.system}".default)
+    ungoogled-chromium
   ];
 
   # Syncthing

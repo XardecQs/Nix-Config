@@ -51,6 +51,10 @@
       };
     };
     plymouth.enable = true;
+    tmp = {
+      useTmpfs = true;
+      cleanOnBoot = true;
+    };
   };
 
   # Virtualización
