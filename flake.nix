@@ -13,6 +13,10 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    winboat = {
+      url = "github:TibixDev/winboat";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
   };
 
   outputs =
@@ -23,6 +27,7 @@
       home-manager,
       zen-browser,
       spicetify-nix,
+      winboat,
       ...
     }:
     let
@@ -53,7 +58,7 @@
                 spicetify-nix.homeManagerModules.default
               ];
               _module.args = {
-                inherit zen-browser spicetify-nix;
+                inherit zen-browser spicetify-nix winboat;
               };
             };
           }
@@ -63,7 +68,7 @@
       homeConfigurations."xardec" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs-stable.legacyPackages.${system};
         extraSpecialArgs = {
-          inherit zen-browser spicetify-nix;
+          inherit zen-browser spicetify-nix winboat;
         };
         modules = [
           {

@@ -4,6 +4,7 @@
   lib,
   zen-browser,
   spicetify-nix,
+  winboat,
   ...
 }:
 
@@ -20,6 +21,7 @@ let
     ".config/user-dirs.dirs" = "config/user-dirs.dirs";
     ".icons" = "homedots/icons";
     ".vscode" = "homedots/vscode";
+    ".config/tmux" = "config/tmux";
   };
 in
 {
@@ -282,6 +284,11 @@ in
     firefox
     (zen-browser.packages."${pkgs.system}".default)
     ungoogled-chromium
+
+    unstable.audacity
+    unstable.libresprite
+
+    (winboat.packages.${system}.winboat)
   ];
 
   # Syncthing
@@ -359,7 +366,13 @@ in
       bindkey '^H' backward-kill-word
       bindkey "^[[3~" delete-char
 
+      EDITOR=nvim
+
       [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
+      
+      if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+        exec tmux new-session -A -s Tmux
+      fi
     '';
 
     shellAliases = {

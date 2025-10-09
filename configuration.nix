@@ -11,7 +11,7 @@
 
   # Gestión de paquetes y store
   nixpkgs.config.allowUnfree = true;
-  
+
   nix = {
     optimise.automatic = true;
     gc = {
@@ -69,6 +69,9 @@
           packages = [ pkgs.OVMFFull.fd ];
         };
       };
+    };
+    docker = {
+      enable = true;
     };
   };
 
@@ -151,6 +154,7 @@
     fastfetch
     gdu
     yazi
+    entr
   ];
 
   # Programas
@@ -232,6 +236,7 @@
         "libvirtd"
         "dialout"
         "waydroid"
+        "docker"
       ];
     };
     users.waydroid-xardec = {
