@@ -63,8 +63,8 @@ in
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       show-battery-percentage = true;
-      color-scheme = "prefer-dark";
-      gtk-theme = "adw-gtk3-dark";
+      #color-scheme = "prefer-dark";
+      #gtk-theme = "adw-gtk3-dark";
     };
     "org/gnome/shell" = {
       enabled-extensions = with pkgs.gnomeExtensions; [
