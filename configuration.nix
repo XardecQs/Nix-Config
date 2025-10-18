@@ -93,7 +93,7 @@
         wayland = true;
       };
       desktopManager.gnome.enable = true;
-      desktopManager.xterm.enable = false;
+      #desktopManager.xterm.enable = false;
       xkb.layout = "latam";
       videoDrivers = [ "intel" ];
     };
@@ -128,6 +128,17 @@
   };
 
   security.rtkit.enable = true;
+
+  environment.gnome.excludePackages = with pkgs; [
+    seahorse
+    gnome-system-monitor
+    gnome-tour
+    gnome-user-docs
+    gnome-console
+    totem
+    epiphany
+    yelp
+  ];
 
   # Paquetes mínimos del sistema
   environment.systemPackages = with pkgs; [
@@ -261,11 +272,10 @@
   };
 
   fileSystems = {
-
-    "/home/xardec/.local/share/fonts" = {
-      device = "/usr/share/fonts";
-      fsType = "fuse.bindfs";
-    };
+    #"/home/xardec/.local/share/fonts" = {
+    #  device = "/usr/share/fonts";
+    #  fsType = "fuse.bindfs";
+    #};
 
     "/home/xardec/.local/share/waydroid/data/media/0/Download" = {
       device = "/home/xardec/Descargas";

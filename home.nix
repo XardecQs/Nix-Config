@@ -13,15 +13,17 @@ let
   dotfiles = "${config.home.homeDirectory}/.dotfiles";
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
   configs = {
-    # final = origen; #
+    # final (relativo a home) = origen (~/.dotfiles); #
     ".config/nvim" = "config/nvim";
     ".config/kitty" = "config/kitty";
     ".config/fastfetch" = "config/fastfetch";
     ".config/zsh" = "config/zsh";
     ".config/user-dirs.dirs" = "config/user-dirs.dirs";
     ".icons" = "homedots/icons";
+    ".local/share/icons" = "homedots/icons";
     ".vscode" = "homedots/vscode";
     ".config/tmux" = "config/tmux";
+    ".local/share/fonts" = "fonts";
   };
 in
 {
@@ -42,12 +44,12 @@ in
 
   gtk = {
     enable = true;
-    iconTheme.name = "Definitivo";
+    #iconTheme.name = "Definitivo";
     cursorTheme.name = "MacOS-Tahoe-Cursor";
-    theme = {
-      name = "adw-gtk3-dark";
-      package = pkgs.adw-gtk3;
-    };
+    #theme = {
+    #  name = "adw-gtk3-dark";
+    #  package = pkgs.adw-gtk3;
+    #};
     font.name = "SF Pro Display";
   };
 
@@ -61,6 +63,10 @@ in
   };
 
   dconf.settings = {
+    "org/gnome/desktop/privacy" = {
+      remember-recent-files = false;
+    };
+
     "org/gnome/desktop/interface" = {
       show-battery-percentage = true;
       #color-scheme = "prefer-dark";
@@ -82,6 +88,7 @@ in
         tray-icons-reloaded.extensionUuid
         emoji-copy.extensionUuid
         logo-menu.extensionUuid
+        auto-adwaita-colors.extensionUuid
       ];
     };
     "org/gnome/shell/extensions/user-theme" = {
@@ -178,6 +185,7 @@ in
     gnomeExtensions.user-themes
     gnomeExtensions.rounded-window-corners-reborn
     gnomeExtensions.maximize-to-empty-workspace-2025
+    gnomeExtensions.auto-adwaita-colors
     gnomeExtensions.fullscreen-hot-corner
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.caffeine
@@ -202,6 +210,7 @@ in
     nerd-fonts.jetbrains-mono
     papirus-icon-theme
     marble-shell-theme
+    adw-gtk3
 
     # Development tools
     gcc
@@ -281,14 +290,17 @@ in
     obsidian
     showtime
     
-    firefox
     (zen-browser.packages."${pkgs.system}".default)
     ungoogled-chromium
 
     unstable.audacity
     unstable.libresprite
+    unstable.iconic
 
     (winboat.packages.${system}.winboat)
+    hardinfo2
+    easyeffects
+    losslesscut-bin
   ];
 
   # Syncthing
@@ -371,7 +383,7 @@ in
       [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
       
       if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-        exec tmux new-session -A -s Tmux
+        exec tmux new-session -A
       fi
     '';
 

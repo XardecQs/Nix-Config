@@ -20,7 +20,7 @@
   };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs-stable,
       nixpkgs-unstable,
