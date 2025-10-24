@@ -127,7 +127,10 @@
     spice-vdagentd.enable = true;
   };
 
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    polkit.enable = true;
+  };
 
   environment.gnome.excludePackages = with pkgs; [
     seahorse
@@ -166,10 +169,12 @@
     gdu
     yazi
     entr
+    direnv
   ];
 
   # Programas
   programs = {
+    obs-studio.enableVirtualCamera = true;
     kdeconnect = {
       enable = true;
       package = pkgs.gnomeExtensions.gsconnect;
@@ -215,6 +220,7 @@
 
         source <(fzf --zsh)
         eval "$(zoxide init --cmd cd zsh)"
+        eval "$(direnv hook zsh)"
 
         autoload -U select-word-style
         select-word-style bash
@@ -229,7 +235,13 @@
         bindkey '^H' backward-kill-word
         bindkey "^[[3~" delete-char
 
+        EDITOR=nvim
+
         [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
+      
+        if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+          exec tmux new-session -A
+        fi
       '';
     };
   };

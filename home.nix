@@ -274,9 +274,6 @@ in
     waydroid-helper
     rustup
     glibc.static
-    obs-studio
-    obs-studio-plugins.wlrobs
-    obs-studio-plugins.obs-pipewire-audio-capture
     upx
     arduino
     arduino-cli
@@ -289,7 +286,7 @@ in
     anki
     obsidian
     showtime
-    
+
     (zen-browser.packages."${pkgs.system}".default)
     ungoogled-chromium
 
@@ -301,6 +298,9 @@ in
     hardinfo2
     easyeffects
     losslesscut-bin
+    qbittorrent
+    peazip
+    fritzing
   ];
 
   # Syncthing
@@ -334,6 +334,16 @@ in
     };
   };
 
+  programs.obs-studio = {
+    enable = true;
+    #enableVirtualCamera = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      wlrobs
+      obs-pipewire-audio-capture
+      droidcam-obs
+    ];
+  };
+
   # Spicetify
   programs.spicetify = {
     enable = true;
@@ -364,6 +374,7 @@ in
 
       source <(fzf --zsh)
       eval "$(zoxide init --cmd cd zsh)"
+      eval "$(direnv hook zsh)"
 
       autoload -U select-word-style
       select-word-style bash
@@ -381,7 +392,7 @@ in
       EDITOR=nvim
 
       [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
-      
+
       if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
         exec tmux new-session -A
       fi
