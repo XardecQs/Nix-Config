@@ -190,6 +190,10 @@
       enable = true;
       terminal = "kitty";
     };
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
     zsh = {
       enable = true;
       enableCompletion = true;
@@ -238,7 +242,7 @@
         EDITOR=nvim
 
         [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
-      
+
         if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
           exec tmux new-session -A
         fi

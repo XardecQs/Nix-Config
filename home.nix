@@ -235,7 +235,7 @@ in
     # Gaming and emulation
     wineWowPackages.stagingFull
     winetricks
-    lutris
+    unstable.lutris
     mangohud
     protonup
     unstable.prismlauncher
@@ -293,14 +293,15 @@ in
     unstable.audacity
     unstable.libresprite
     unstable.iconic
-
+    unstable.godot
+    
     (winboat.packages.${system}.winboat)
     hardinfo2
     easyeffects
     losslesscut-bin
     qbittorrent
     peazip
-    fritzing
+    appimage-run
   ];
 
   # Syncthing
