@@ -1,7 +1,16 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    #"${inputs.jovian-nixos}/modules"
+  ];
 
   # Configuración básica del sistema
   system.stateVersion = "25.05";
@@ -86,6 +95,7 @@
 
   # Servicios
   services = {
+    flatpak.enable = true;
     xserver = {
       enable = true;
       displayManager.gdm = {
@@ -170,6 +180,8 @@
     yazi
     entr
     direnv
+
+    nix-ld
   ];
 
   # Programas
@@ -184,6 +196,10 @@
       gamescopeSession.enable = true;
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
+    };
+    nix-ld = {
+      enable = true;
+      libraries = (pkgs.steam-run.args.multiPkgs pkgs) ++ [ pkgs.libGL ];
     };
     gamemode.enable = true;
     nautilus-open-any-terminal = {

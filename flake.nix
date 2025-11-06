@@ -17,6 +17,11 @@
       url = "github:TibixDev/winboat";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
+    jovian-nixos = {
+      url = "github:Jovian-Experiments/Jovian-NixOS";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
   outputs =
@@ -28,26 +33,29 @@
       zen-browser,
       spicetify-nix,
       winboat,
+      jovian-nixos,
+      nix-flatpak,
       ...
     }:
     let
       system = "x86_64-linux";
       unstable-overlay = final: _prev: {
         unstable = import nixpkgs-unstable {
-          inherit (final) system config; # Hereda system y config (incluye allowUnfree)
+          inherit (final) system config;
         };
       };
     in
     {
       nixosConfigurations.NeoReaper = nixpkgs-stable.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit inputs; };
         modules = [
-          # Configuración global de Nixpkgs
           {
             nixpkgs.overlays = [ unstable-overlay ];
             nixpkgs.config.allowUnfree = true;
           }
           ./configuration.nix
+          nix-flatpak.nixosModules.nix-flatpak
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -55,6 +63,7 @@
             home-manager.users.xardec = {
               imports = [
                 ./home.nix
+                nix-flatpak.homeManagerModules.nix-flatpak
                 spicetify-nix.homeManagerModules.default
               ];
               _module.args = {
@@ -76,6 +85,7 @@
             nixpkgs.config.allowUnfree = true;
           }
           ./home.nix
+          nix-flatpak.homeManagerModules.nix-flatpak
           spicetify-nix.homeManagerModules.default
         ];
       };

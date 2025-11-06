@@ -14,18 +14,24 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = [
-    "xhci_pci"
-    "ahci"
-    "usbhid"
-    "usb_storage"
-    "sd_mod"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    v4l2loopback
-  ];
+  boot = {
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "ahci"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+    ];
+    initrd.kernelModules = [ ];
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = with config.boot.kernelPackages; [
+      v4l2loopback
+    ];
+    kernelParams = [
+      "i915.enable_psr=0"
+      "i915.enable_fbc=1"
+    ];
+  };
 
   fileSystems = {
     "/" = {

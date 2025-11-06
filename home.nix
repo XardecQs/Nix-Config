@@ -235,10 +235,10 @@ in
     # Gaming and emulation
     wineWowPackages.stagingFull
     winetricks
-    unstable.lutris
     mangohud
     protonup
     unstable.prismlauncher
+    unstable.lutris
     mcaselector
     gamemode
 
@@ -302,6 +302,7 @@ in
     qbittorrent
     peazip
     appimage-run
+    snes9x-gtk
   ];
 
   # Syncthing
