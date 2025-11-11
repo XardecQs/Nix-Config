@@ -2,9 +2,8 @@
   config,
   pkgs,
   lib,
-  zen-browser,
   spicetify-nix,
-  winboat,
+  affinity-nix,
   ...
 }:
 
@@ -23,7 +22,7 @@ let
     ".local/share/icons" = "homedots/icons";
     ".vscode" = "homedots/vscode";
     ".config/tmux" = "config/tmux";
-    ".local/share/fonts" = "fonts";
+    ".local/share/fonts" = "homedots/fonts";
   };
 in
 {
@@ -32,6 +31,10 @@ in
     username = "xardec";
     homeDirectory = "/home/xardec";
   };
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "gradle-7.6.6"
+  ];
 
   # Archivos de configuración
   home.file = builtins.mapAttrs (name: subpath: {
@@ -152,7 +155,7 @@ in
 
   # Paquetes de usuario
   home.packages = with pkgs; [
-    # CLI tools
+    # CLI Utilities
     git
     wget
     neovim
@@ -174,10 +177,18 @@ in
     gdu
     yazi
 
-    # Desktop environment
+    # Desktop Applications
     kitty
     gnome-tweaks
     gnome-extension-manager
+    dconf-editor
+    github-desktop
+    zenity
+    menulibre
+    nautilus-python
+    nautilus-open-any-terminal
+
+    # GNOME Extensions
     gnomeExtensions.gsconnect
     gnomeExtensions.blur-my-shell
     gnomeExtensions.gtk4-desktop-icons-ng-ding
@@ -192,27 +203,24 @@ in
     gnomeExtensions.tray-icons-reloaded
     gnomeExtensions.emoji-copy
     gnomeExtensions.logo-menu
-    dconf-editor
-    github-desktop
-    switcheroo
-    zenity
-    ffmpegthumbnailer
-    jellyfin-ffmpeg
-    menulibre
-    nautilus-python
-    nautilus-open-any-terminal
 
-    # Multimedia and design
+    # Multimedia
     krita
     inkscape
+    ffmpegthumbnailer
+    jellyfin-ffmpeg
+    gthumb
+    unstable.audacity
+    unstable.libresprite
+    blender
+    losslesscut-bin
+    cava
+    #gapless
+    showtime
+    youtube-music
+    easyeffects
 
-    # Themes
-    nerd-fonts.jetbrains-mono
-    papirus-icon-theme
-    marble-shell-theme
-    adw-gtk3
-
-    # Development tools
+    # Development
     gcc
     binutils
     gnumake
@@ -222,27 +230,17 @@ in
     home-manager
     nixfmt-rfc-style
     texliveFull
+    rustup
+    glibc.static
+    upx
+    arduino
+    arduino-cli
+    unstable.vscode
+    unstable.godot
 
-    # Containerization
+    # System & Utilities
     podman
     distrobox
-
-    # Development and utilities
-    unstable.vscode
-    gthumb
-    onlyoffice-desktopeditors
-
-    # Gaming and emulation
-    wineWowPackages.stagingFull
-    winetricks
-    mangohud
-    protonup
-    unstable.prismlauncher
-    unstable.lutris
-    mcaselector
-    gamemode
-
-    # Virtualization
     virt-manager
     virt-viewer
     spice
@@ -254,56 +252,66 @@ in
     qemu
     libvirt
     swtpm
-
-    # AI and image processing
     realcugan-ncnn-vulkan
     realesrgan-ncnn-vulkan
-
-    # Media
-    youtube-music
-
-    # Miscellaneous
-    icoextract
     android-tools
     alsa-utils
+    desktop-file-utils
+    appimage-run
+    hardinfo2
+    gamemode
+    mangohud
+
+    # Themes & Fonts
+    nerd-fonts.jetbrains-mono
+    papirus-icon-theme
+    marble-shell-theme
+    adw-gtk3
+
+    # Gaming
+    wineWowPackages.stagingFull
+    winetricks
+    protonup
+    unstable.prismlauncher
+    unstable.lutris
+    mcaselector
+    snes9x-gtk
+    unstable.winboat
+
+    # Communication
     zapzap
     discord
     telegram-desktop
-    blender
+
+    # Miscellaneous
+    icoextract
     waydroid
     waydroid-helper
-    rustup
-    glibc.static
-    upx
-    arduino
-    arduino-cli
     gnome-network-displays
     hydralauncher
-    cava
-    gapless
-    desktop-file-utils
-    resources
-    anki
-    obsidian
-    showtime
-
-    (zen-browser.packages."${pkgs.system}".default)
-    ungoogled-chromium
-
-    unstable.audacity
-    unstable.libresprite
-    unstable.iconic
-    unstable.godot
-    
-    (winboat.packages.${system}.winboat)
-    hardinfo2
-    easyeffects
-    losslesscut-bin
+    onlyoffice-desktopeditors
     qbittorrent
     peazip
-    appimage-run
-    snes9x-gtk
+    resources
+    #ungoogled-chromium
+
+    #affinity-nix.packages.x86_64-linux.v3
   ];
+
+  services.flatpak = {
+    enable = true;
+    packages = [
+      "com.github.tchx84.Flatseal"
+      "com.github.johnfactotum.Foliate"
+      "app.zen_browser.zen"
+      "md.obsidian.Obsidian"
+      "net.blockbench.Blockbench"
+      "io.gitlab.adhami3310.Converter"
+      "org.nickvision.tubeconverter"
+      "io.github.ungoogled_software.ungoogled_chromium"
+      "com.github.neithern.g4music"
+    ];
+  };
 
   # Syncthing
   services.syncthing = {

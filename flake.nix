@@ -8,20 +8,13 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
-    zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    winboat = {
-      url = "github:TibixDev/winboat";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    affinity-nix.url = "github:mrshmllow/affinity-nix";
   };
 
   outputs =
@@ -30,11 +23,10 @@
       nixpkgs-stable,
       nixpkgs-unstable,
       home-manager,
-      zen-browser,
       spicetify-nix,
-      winboat,
       jovian-nixos,
       nix-flatpak,
+      affinity-nix,
       ...
     }:
     let
@@ -67,7 +59,7 @@
                 spicetify-nix.homeManagerModules.default
               ];
               _module.args = {
-                inherit zen-browser spicetify-nix winboat;
+                inherit spicetify-nix affinity-nix;
               };
             };
           }
@@ -77,7 +69,7 @@
       homeConfigurations."xardec" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs-stable.legacyPackages.${system};
         extraSpecialArgs = {
-          inherit zen-browser spicetify-nix winboat;
+          inherit spicetify-nix affinity-nix;
         };
         modules = [
           {

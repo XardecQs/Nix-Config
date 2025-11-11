@@ -12,6 +12,10 @@
     #"${inputs.jovian-nixos}/modules"
   ];
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "gradle-7.6.6"
+  ];
+
   # Configuración básica del sistema
   system.stateVersion = "25.05";
   time.timeZone = "America/Lima";
