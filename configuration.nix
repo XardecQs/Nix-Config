@@ -144,6 +144,7 @@
   security = {
     rtkit.enable = true;
     polkit.enable = true;
+    allowUserNamespaces = true;
   };
 
   environment.gnome.excludePackages = with pkgs; [
@@ -186,10 +187,12 @@
     direnv
 
     nix-ld
+    bubblewrap
   ];
 
   # Programas
   programs = {
+    firejail.enable = true;
     obs-studio.enableVirtualCamera = true;
     kdeconnect = {
       enable = true;

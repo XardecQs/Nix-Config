@@ -30,6 +30,7 @@ in
     stateVersion = "25.05";
     username = "xardec";
     homeDirectory = "/home/xardec";
+    #sessionPath = [ "/home/xardec/.local/bin" ];
   };
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -274,14 +275,14 @@ in
     protonup
     unstable.prismlauncher
     unstable.lutris
-    mcaselector
+    unstable.mcaselector
     snes9x-gtk
-    unstable.winboat
+    #unstable.winboat
 
     # Communication
-    zapzap
-    discord
-    telegram-desktop
+    #zapzap
+    #discord
+    #telegram-desktop
 
     # Miscellaneous
     icoextract
@@ -308,8 +309,9 @@ in
       "net.blockbench.Blockbench"
       "io.gitlab.adhami3310.Converter"
       "org.nickvision.tubeconverter"
-      "io.github.ungoogled_software.ungoogled_chromium"
+      "org.kde.kdenlive"
       "com.github.neithern.g4music"
+      "com.rtosta.zapzap"
     ];
   };
 
@@ -321,7 +323,7 @@ in
       options.urAccepted = -1;
       devices = {
         "Redmi Note 10 Pro" = {
-          id = "C74GATB-E337PHR-EVNK36T-ZPDD4JY-I4HHD2K-MFVFPTK-36J2R7I-MHSBRQ2";
+          id = "OQ5MU4I-G5DKSP2-LHRBRDG-INSRAXN-N4XZ2X5-WEG4VEC-BJW6WSJ-WK3FPAF";
         };
       };
       folders = {
@@ -400,6 +402,8 @@ in
       bindkey "^[[3~" delete-char
 
       EDITOR=nvim
+
+      export PATH="$PATH:$HOME/.local/bin"
 
       [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
 
