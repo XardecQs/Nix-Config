@@ -54,6 +54,17 @@
       ];
     };
 
+    "/important" = {
+      device = "/dev/disk/by-uuid/1f416b78-cafd-4ad1-a37c-13142bfff2fd";
+      fsType = "btrfs";
+      options = [
+        "subvol=@important"
+        "compress=zstd"
+        "autodefrag"
+        "space_cache=v2"
+      ];
+    };
+
     "/home" = {
       device = "/dev/disk/by-uuid/9f4f0f39-eadf-4fb0-827d-1c9a72b45f75";
       fsType = "btrfs";

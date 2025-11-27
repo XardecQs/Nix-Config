@@ -290,7 +290,7 @@ in
     waydroid-helper
     gnome-network-displays
     hydralauncher
-    onlyoffice-desktopeditors
+    #onlyoffice-desktopeditors
     qbittorrent
     peazip
     resources
@@ -312,6 +312,7 @@ in
       "org.kde.kdenlive"
       "com.github.neithern.g4music"
       "com.rtosta.zapzap"
+      "org.onlyoffice.desktopeditors"
     ];
   };
 
