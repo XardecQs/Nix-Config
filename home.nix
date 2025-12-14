@@ -27,15 +27,15 @@ let
 in
 {
   home = {
-    stateVersion = "25.05";
+    stateVersion = "25.11";
     username = "xardec";
     homeDirectory = "/home/xardec";
     #sessionPath = [ "/home/xardec/.local/bin" ];
   };
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "gradle-7.6.6"
-  ];
+  #nixpkgs.config.permittedInsecurePackages = [
+  #  "gradle-7.6.6"
+  #];
 
   # Archivos de configuración
   home.file = builtins.mapAttrs (name: subpath: {
@@ -78,7 +78,6 @@ in
     };
     "org/gnome/shell" = {
       enabled-extensions = with pkgs.gnomeExtensions; [
-        maximize-to-empty-workspace-2025.extensionUuid
         dash-to-dock.extensionUuid
         show-desktop-button.extensionUuid
         user-themes.extensionUuid
@@ -93,6 +92,7 @@ in
         emoji-copy.extensionUuid
         logo-menu.extensionUuid
         auto-adwaita-colors.extensionUuid
+
       ];
     };
     "org/gnome/shell/extensions/user-theme" = {
@@ -217,7 +217,7 @@ in
     losslesscut-bin
     cava
     #gapless
-    showtime
+    #showtime
     youtube-music
     easyeffects
 
@@ -247,7 +247,7 @@ in
     spice
     spice-gtk
     spice-protocol
-    win-virtio
+    virtio-win
     win-spice
     freerdp
     qemu
@@ -270,11 +270,14 @@ in
     adw-gtk3
 
     # Gaming
-    wineWowPackages.stagingFull
+    wineWowPackages.stableFull
+    #wineWowPackages.stagingFull
+    #wineWowPackages.waylandFull
     winetricks
-    protonup
+    protonup-ng
     unstable.prismlauncher
     unstable.lutris
+    unstable.heroic
     unstable.mcaselector
     snes9x-gtk
     #unstable.winboat
@@ -324,7 +327,7 @@ in
       options.urAccepted = -1;
       devices = {
         "Redmi Note 10 Pro" = {
-          id = "OQ5MU4I-G5DKSP2-LHRBRDG-INSRAXN-N4XZ2X5-WEG4VEC-BJW6WSJ-WK3FPAF";
+          id = "CKKQFLP-DHF2EVH-DTYRSR3-JE4EPTH-CZF2P6S-56VFBL5-55E4GYA-EF7CWQJ";
         };
       };
       folders = {

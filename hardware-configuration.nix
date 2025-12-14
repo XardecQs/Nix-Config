@@ -66,7 +66,7 @@
     };
 
     "/home" = {
-      device = "/dev/disk/by-uuid/9f4f0f39-eadf-4fb0-827d-1c9a72b45f75";
+      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
       fsType = "btrfs";
       options = [
         "subvol=@home"
@@ -77,7 +77,7 @@
     };
 
     "/opt/games" = {
-      device = "/dev/disk/by-uuid/9f4f0f39-eadf-4fb0-827d-1c9a72b45f75";
+      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
       fsType = "btrfs";
       options = [
         "subvol=@games"
@@ -88,7 +88,7 @@
     };
 
     "/srv/backups" = {
-      device = "/dev/disk/by-uuid/9f4f0f39-eadf-4fb0-827d-1c9a72b45f75";
+      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
       fsType = "btrfs";
       options = [
         "subvol=@backups"
@@ -99,7 +99,7 @@
     };
 
     "/srv/vms" = {
-      device = "/dev/disk/by-uuid/9f4f0f39-eadf-4fb0-827d-1c9a72b45f75";
+      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
       fsType = "btrfs";
       options = [
         "subvol=@vms"

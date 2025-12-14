@@ -11,13 +11,21 @@
     ./hardware-configuration.nix
     #"${inputs.jovian-nixos}/modules"
   ];
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "gradle-7.6.6"
-  ];
+  system.preSwitchChecks = {
+    # This script checks for a specific file before activating the new configuration.
+    ensureFileExists = ''
+      if [ ! -f /home/xardec/.dotfiles ]; then
+        git clone https://github.com/XardecQs/Nix-Config.git /home/xardec/.dotfiles
+        exit 0
+      fi
+    '';
+  };
+  #nixpkgs.config.permittedInsecurePackages = [
+  #  "gradle-7.6.6"
+  #];
 
   # Configuración básica del sistema
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
   time.timeZone = "America/Lima";
   i18n.defaultLocale = "es_PE.UTF-8";
   console.keyMap = "la-latin1";
@@ -52,6 +60,7 @@
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
+      timeout = 0;
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot/efi";
@@ -77,10 +86,6 @@
       enable = true;
       qemu = {
         swtpm.enable = true;
-        ovmf = {
-          enable = true;
-          packages = [ pkgs.OVMFFull.fd ];
-        };
       };
     };
     docker = {
@@ -185,6 +190,8 @@
     yazi
     entr
     direnv
+    nixd
+    nil
 
     nix-ld
     bubblewrap
@@ -316,53 +323,53 @@
     #  fsType = "fuse.bindfs";
     #};
 
-    "/home/xardec/.local/share/waydroid/data/media/0/Download" = {
-      device = "/home/xardec/Descargas";
-      fsType = "fuse.bindfs";
-      options = [
-        "uid=waydroid-xardec"
-        "gid=waydroid"
-        "create-for-user=xardec"
-        "create-for-group=users"
-        "user"
-        "nofail"
-      ];
-    };
-    "/home/xardec/.local/share/waydroid/data/media/0/Music" = {
-      device = "/home/xardec/Media/Música";
-      fsType = "fuse.bindfs";
-      options = [
-        "uid=waydroid-xardec"
-        "gid=waydroid"
-        "create-for-user=xardec"
-        "create-for-group=users"
-        "user"
-        "nofail"
-      ];
-    };
-    "/home/xardec/.local/share/waydroid/data/media/0/Documents" = {
-      device = "/home/xardec/Documentos";
-      fsType = "fuse.bindfs";
-      options = [
-        "uid=waydroid-xardec"
-        "gid=waydroid"
-        "create-for-user=xardec"
-        "create-for-group=users"
-        "user"
-        "nofail"
-      ];
-    };
-    "/home/xardec/.local/share/waydroid/data/media/0/Android/data/org.koitharu.kotatsu/files/manga" = {
-      device = "/home/xardec/Media/Mangas/.Kotatsu";
-      fsType = "fuse.bindfs";
-      options = [
-        "uid=10129"
-        "gid=1078"
-        "create-for-user=xardec"
-        "create-for-group=users"
-        "user"
-        "nofail"
-      ];
-    };
+    #"/home/xardec/.local/share/waydroid/data/media/0/Download" = {
+    #  device = "/home/xardec/Descargas";
+    #  fsType = "fuse.bindfs";
+    #  options = [
+    #    "uid=waydroid-xardec"
+    #    "gid=waydroid"
+    #    "create-for-user=xardec"
+    #    "create-for-group=users"
+    #    "user"
+    #    "nofail"
+    #  ];
+    #};
+    #"/home/xardec/.local/share/waydroid/data/media/0/Music" = {
+    #  device = "/home/xardec/Media/Música";
+    #  fsType = "fuse.bindfs";
+    #  options = [
+    #    "uid=waydroid-xardec"
+    #    "gid=waydroid"
+    #    "create-for-user=xardec"
+    #    "create-for-group=users"
+    #    "user"
+    #    "nofail"
+    #  ];
+    #};
+    #"/home/xardec/.local/share/waydroid/data/media/0/Documents" = {
+    #  device = "/home/xardec/Documentos";
+    #  fsType = "fuse.bindfs";
+    #  options = [
+    #    "uid=waydroid-xardec"
+    #    "gid=waydroid"
+    #    "create-for-user=xardec"
+    #    "create-for-group=users"
+    #    "user"
+    #    "nofail"
+    #  ];
+    #};
+    #"/home/xardec/.local/share/waydroid/data/media/0/Android/data/org.koitharu.kotatsu/files/manga" = {
+    #  device = "/home/xardec/Media/Mangas/.Kotatsu";
+    #  fsType = "fuse.bindfs";
+    #  options = [
+    #    "uid=10129"
+    #    "gid=1078"
+    #    "create-for-user=xardec"
+    #    "create-for-group=users"
+    #    "user"
+    #    "nofail"
+    #  ];
+    #};
   };
 }

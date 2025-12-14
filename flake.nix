@@ -1,11 +1,12 @@
 {
+
   description = "NeoReaper NixOS configuration";
 
   inputs = {
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
@@ -15,6 +16,11 @@
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     affinity-nix.url = "github:mrshmllow/affinity-nix";
+    nix4nvchad = {
+      url = "github:nix-community/nix4nvchad";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
+
   };
 
   outputs =
