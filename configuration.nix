@@ -1,36 +1,16 @@
-{
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
-}:
-
+{ config, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
-    #"${inputs.jovian-nixos}/modules"
   ];
-  system.preSwitchChecks = {
-    # This script checks for a specific file before activating the new configuration.
-    ensureFileExists = ''
-      if [ ! -f /home/xardec/.dotfiles ]; then
-        git clone https://github.com/XardecQs/Nix-Config.git /home/xardec/.dotfiles
-        exit 0
-      fi
-    '';
-  };
-  #nixpkgs.config.permittedInsecurePackages = [
-  #  "gradle-7.6.6"
-  #];
 
-  # Configuración básica del sistema
+  #/--------------------/ Versión y locale básico /--------------------/#
   system.stateVersion = "25.11";
   time.timeZone = "America/Lima";
   i18n.defaultLocale = "es_PE.UTF-8";
   console.keyMap = "la-latin1";
 
-  # Gestión de paquetes y store
+  #/--------------------/ Nix (optimización y flakes) /--------------------/#
   nixpkgs.config.allowUnfree = true;
 
   nix = {
@@ -50,17 +30,23 @@
     };
   };
 
-  # Red
+  #/--------------------/ Red /--------------------/#
   networking = {
     hostName = "NeoReaper";
     networkmanager.enable = true;
   };
 
-  # Boot
+  #/--------------------/ Boot /--------------------/#
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
+    plymouth.enable = true;
+    tmp = {
+      useTmpfs = true;
+      cleanOnBoot = true;
+    };
+
     loader = {
-      timeout = 0;
+      timeout = 5;
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot/efi";
@@ -72,28 +58,9 @@
         useOSProber = true;
       };
     };
-    plymouth.enable = true;
-    tmp = {
-      useTmpfs = true;
-      cleanOnBoot = true;
-    };
   };
 
-  # Virtualización
-  virtualisation = {
-    waydroid.enable = true;
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-      };
-    };
-    docker = {
-      enable = true;
-    };
-  };
-
-  # Hardware
+  #/--------------------/ Hardware y gráficos /--------------------/#
   hardware = {
     graphics = {
       enable = true;
@@ -102,17 +69,25 @@
     cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
   };
 
-  # Servicios
+  #/--------------------/ Virtualización y contenedores /--------------------/#
+  virtualisation = {
+    waydroid.enable = true;
+    libvirtd.enable = true;
+    docker.enable = true;
+  };
+
+  #/--------------------/ Servicios principales /--------------------/#
   services = {
     flatpak.enable = true;
+
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
+    desktopManager.gnome.enable = true;
+
     xserver = {
       enable = true;
-      displayManager.gdm = {
-        enable = true;
-        wayland = true;
-      };
-      desktopManager.gnome.enable = true;
-      #desktopManager.xterm.enable = false;
       xkb.layout = "latam";
       videoDrivers = [ "intel" ];
     };
@@ -122,7 +97,7 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      wireplumber.enable = true; # Explicit for advanced audio routing
+      wireplumber.enable = true;
     };
 
     printing = {
@@ -141,8 +116,6 @@
       ];
     };
 
-    openssh.enable = false;
-    pulseaudio.enable = false;
     spice-vdagentd.enable = true;
   };
 
@@ -152,27 +125,13 @@
     allowUserNamespaces = true;
   };
 
-  environment.gnome.excludePackages = with pkgs; [
-    seahorse
-    gnome-system-monitor
-    gnome-tour
-    gnome-user-docs
-    gnome-console
-    totem
-    epiphany
-    yelp
-  ];
-
-  # Paquetes mínimos del sistema
+  #/--------------------/ Paquetes del sistema (mínimos) /--------------------/#
   environment.systemPackages = with pkgs; [
-    # Herramientas esenciales
     btrfs-progs
     gparted
     bindfs
     kitty
-
     wget
-    neovim
     tree
     bat
     btop
@@ -182,7 +141,6 @@
     wl-clipboard
     unimatrix
     tmux
-    zsh-powerlevel10k
     zoxide
     lsd
     fastfetch
@@ -192,95 +150,31 @@
     direnv
     nixd
     nil
-
     nix-ld
     bubblewrap
   ];
 
-  # Programas
+  #/--------------------/ Programas habilitados /--------------------/#
   programs = {
     firejail.enable = true;
     obs-studio.enableVirtualCamera = true;
-    kdeconnect = {
-      enable = true;
-      package = pkgs.gnomeExtensions.gsconnect;
-    };
+    kdeconnect.package = pkgs.gnomeExtensions.gsconnect;
     steam = {
       enable = true;
       gamescopeSession.enable = true;
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
     };
-    nix-ld = {
-      enable = true;
-      libraries = (pkgs.steam-run.args.multiPkgs pkgs) ++ [ pkgs.libGL ];
-    };
+    nix-ld.enable = true;
     gamemode.enable = true;
-    nautilus-open-any-terminal = {
-      enable = true;
-      terminal = "kitty";
-    };
     appimage = {
       enable = true;
       binfmt = true;
     };
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      autosuggestions.enable = true;
-      syntaxHighlighting.enable = true;
-      shellAliases = {
-        lla = "lsd -la";
-        la = "lsd -a";
-        ll = "lsd -l";
-        l1 = "lsd -1";
-        ls = "lsd";
-        q = "exit";
-        c = "clear";
-        ".." = "cd ..";
-        "..." = "cd ../..";
-        cf = "clear && fastfetch";
-        cff = "clear && fastfetch --config /home/xardec/.dotfiles/config/fastfetch/13-custom.jsonc";
-        cp = "cp --reflink=auto";
-        umatrix = "unimatrix -s 95 -f";
-        grep = "grep --color=auto";
-        diff = "diff --color=auto";
-      };
-      histFile = "$HOME/.local/share/zsh/history";
-      histSize = 10000;
-      interactiveShellInit = ''
-        source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-        source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.zsh
-
-        source <(fzf --zsh)
-        eval "$(zoxide init --cmd cd zsh)"
-        eval "$(direnv hook zsh)"
-
-        autoload -U select-word-style
-        select-word-style bash
-
-        zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-        zstyle ':completion:*' menu no
-        zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.lsd}/bin/lsd --color=always $realpath'
-        zstyle ':fzf-tab:*' fzf-flags --height=55% --border
-
-        bindkey '^[[1;5C' forward-word
-        bindkey '^[[1;5D' backward-word
-        bindkey '^H' backward-kill-word
-        bindkey "^[[3~" delete-char
-
-        EDITOR=nvim
-
-        [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
-
-        if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-          exec tmux new-session -A
-        fi
-      '';
-    };
+    zsh.enable = true;
   };
 
-  # Usuarios
+  #/--------------------/ Usuarios y grupos /--------------------/#
   users = {
     defaultUserShell = pkgs.zsh;
     users.root.shell = pkgs.zsh;
@@ -296,11 +190,11 @@
         "docker"
       ];
     };
+    # Usuarios/grupos de Waydroid (necesarios)
     users.waydroid-xardec = {
       isSystemUser = true;
       uid = 10121;
       group = "waydroid";
-      description = "xardec en Waydroid";
       home = "/var/empty";
       shell = "/run/current-system/sw/bin/nologin";
     };
@@ -308,68 +202,12 @@
       isSystemUser = true;
       uid = 1023;
       group = "waydroid";
-      description = "root de Waydroid";
       home = "/var/empty";
       shell = "/run/current-system/sw/bin/nologin";
     };
-    groups.waydroid = {
-      gid = 1023;
-    };
+    groups.waydroid.gid = 1023;
   };
 
-  fileSystems = {
-    #"/home/xardec/.local/share/fonts" = {
-    #  device = "/usr/share/fonts";
-    #  fsType = "fuse.bindfs";
-    #};
-
-    #"/home/xardec/.local/share/waydroid/data/media/0/Download" = {
-    #  device = "/home/xardec/Descargas";
-    #  fsType = "fuse.bindfs";
-    #  options = [
-    #    "uid=waydroid-xardec"
-    #    "gid=waydroid"
-    #    "create-for-user=xardec"
-    #    "create-for-group=users"
-    #    "user"
-    #    "nofail"
-    #  ];
-    #};
-    #"/home/xardec/.local/share/waydroid/data/media/0/Music" = {
-    #  device = "/home/xardec/Media/Música";
-    #  fsType = "fuse.bindfs";
-    #  options = [
-    #    "uid=waydroid-xardec"
-    #    "gid=waydroid"
-    #    "create-for-user=xardec"
-    #    "create-for-group=users"
-    #    "user"
-    #    "nofail"
-    #  ];
-    #};
-    #"/home/xardec/.local/share/waydroid/data/media/0/Documents" = {
-    #  device = "/home/xardec/Documentos";
-    #  fsType = "fuse.bindfs";
-    #  options = [
-    #    "uid=waydroid-xardec"
-    #    "gid=waydroid"
-    #    "create-for-user=xardec"
-    #    "create-for-group=users"
-    #    "user"
-    #    "nofail"
-    #  ];
-    #};
-    #"/home/xardec/.local/share/waydroid/data/media/0/Android/data/org.koitharu.kotatsu/files/manga" = {
-    #  device = "/home/xardec/Media/Mangas/.Kotatsu";
-    #  fsType = "fuse.bindfs";
-    #  options = [
-    #    "uid=10129"
-    #    "gid=1078"
-    #    "create-for-user=xardec"
-    #    "create-for-group=users"
-    #    "user"
-    #    "nofail"
-    #  ];
-    #};
-  };
+  #/--------------------/ Bindfs (opcional para Waydroid) - Comentado /--------------------/#
+  # fileSystems = { ... };  # Descomenta si necesitas compartir carpetas con Waydroid
 }
