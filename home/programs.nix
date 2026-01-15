@@ -43,6 +43,7 @@ in
         desordenar = "~/Proyectos/Scripts/sh/desordenar.sh";
         codepwd = ''code "$(pwd)"'';
         napwd = ''nautilus "$(pwd)" &> /dev/null & disown'';
+        nix-shell = "nix-shell --run zsh";
       };
 
       initContent = ''

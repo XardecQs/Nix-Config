@@ -16,6 +16,7 @@
         "com.github.neithern.g4music"
         "com.rtosta.zapzap"
         "org.onlyoffice.desktopeditors"
+        "it.mijorus.gearlever"
       ];
     };
 

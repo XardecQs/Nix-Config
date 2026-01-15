@@ -79,6 +79,7 @@
   #/--------------------/ Servicios principales /--------------------/#
   services = {
     flatpak.enable = true;
+    sshd.enable = true;
 
     displayManager.gdm = {
       enable = true;
@@ -152,6 +153,7 @@
     nil
     nix-ld
     bubblewrap
+    neovim
   ];
 
   #/--------------------/ Programas habilitados /--------------------/#

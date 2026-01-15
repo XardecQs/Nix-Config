@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     # CLI & Utilidades
     git
+    gh
     wget
     bat
     btop
@@ -20,6 +21,7 @@
     gdu
     yazi
     home-manager
+    p7zip
 
     # Aplicaciones de escritorio
     kitty
@@ -116,6 +118,7 @@
     unstable.heroic
     unstable.mcaselector
     snes9x-gtk
+    mangohud
 
     # Comunicación y misc
     qbittorrent
