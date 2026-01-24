@@ -21,6 +21,10 @@
       options = "--delete-older-than 7d";
     };
     settings = {
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
       experimental-features = [
         "nix-command"
         "flakes"
@@ -47,16 +51,22 @@
 
     loader = {
       timeout = 5;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 5;
+        consoleMode = "max";
+      };
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot/efi";
       };
-      grub = {
-        enable = true;
-        efiSupport = true;
-        device = "nodev";
-        useOSProber = true;
-      };
+
+      #grub = {
+      #  enable = true;
+      #  efiSupport = true;
+      #  device = "nodev";
+      #  useOSProber = true;
+      #};
     };
   };
 
@@ -83,7 +93,6 @@
 
     displayManager.gdm = {
       enable = true;
-      wayland = true;
     };
     desktopManager.gnome.enable = true;
 

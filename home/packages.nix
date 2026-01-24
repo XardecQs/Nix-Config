@@ -113,7 +113,6 @@
     wineWowPackages.stableFull
     winetricks
     protonup-ng
-    unstable.prismlauncher
     unstable.lutris
     unstable.heroic
     unstable.mcaselector

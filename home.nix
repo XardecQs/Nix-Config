@@ -21,6 +21,7 @@ let
     ".vscode" = "homedots/vscode";
     ".config/tmux" = "config/tmux";
     ".local/share/fonts" = "homedots/fonts";
+    ".zshrc" = "homedots/zshrc";
   };
 in
 {
