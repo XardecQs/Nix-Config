@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   spicetify-nix,
   ...
@@ -10,6 +9,13 @@ let
 in
 {
   programs = {
+    java = {
+      enable = true;
+      package = pkgs.zulu25.override {
+        enableJavaFX = true;
+      };
+    };
+
     obs-studio = {
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [

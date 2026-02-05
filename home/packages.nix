@@ -36,11 +36,9 @@
     # Extensiones GNOME (instaladas como paquetes)
     gnomeExtensions.gsconnect
     gnomeExtensions.blur-my-shell
-    gnomeExtensions.gtk4-desktop-icons-ng-ding
     gnomeExtensions.dash-to-dock
     gnomeExtensions.user-themes
     gnomeExtensions.rounded-window-corners-reborn
-    gnomeExtensions.maximize-to-empty-workspace-2025
     gnomeExtensions.auto-adwaita-colors
     gnomeExtensions.fullscreen-hot-corner
     gnomeExtensions.clipboard-indicator
@@ -48,7 +46,9 @@
     gnomeExtensions.tray-icons-reloaded
     gnomeExtensions.emoji-copy
     gnomeExtensions.logo-menu
-
+    unstable.gnomeExtensions.maximize-window-into-new-workspace
+    unstable.gnomeExtensions.gtk4-desktop-icons-ng-ding
+    
     # Multimedia
     krita
     inkscape
@@ -78,7 +78,7 @@
     arduino-cli
     unstable.vscode
     unstable.godot
-
+    
     # Sistema y virtualización
     podman
     distrobox
@@ -115,7 +115,6 @@
     protonup-ng
     unstable.lutris
     unstable.heroic
-    unstable.mcaselector
     snes9x-gtk
     mangohud
 
@@ -128,4 +127,25 @@
     waydroid
     waydroid-helper
   ];
+
+  services = {
+    flatpak = {
+      enable = true;
+      packages = [
+        "com.github.tchx84.Flatseal"
+        "com.github.johnfactotum.Foliate"
+        "app.zen_browser.zen"
+        "md.obsidian.Obsidian"
+        "net.blockbench.Blockbench"
+        "io.gitlab.adhami3310.Converter"
+        "org.nickvision.tubeconverter"
+        "org.kde.kdenlive"
+        "com.github.neithern.g4music"
+        "com.rtosta.zapzap"
+        "org.onlyoffice.desktopeditors"
+        "it.mijorus.gearlever"
+        "io.github.Querz.mcaselector"
+      ];
+    };
+  };
 }

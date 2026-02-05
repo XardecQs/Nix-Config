@@ -47,6 +47,8 @@
         emoji-copy.extensionUuid
         logo-menu.extensionUuid
         auto-adwaita-colors.extensionUuid
+        "MaximizeWindowIntoNewWorkspace@kyleross.com"
+
       ];
     };
 
