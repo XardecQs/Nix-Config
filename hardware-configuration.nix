@@ -27,6 +27,11 @@
       "i915.enable_psr=0"
       "i915.enable_fbc=1"
     ];
+    kernel.sysctl = {
+    "vm.swappiness" = 100;  # Agresividad para usar ZRAM antes que el disco
+    "vm.watermark_boost_factor" = 0;
+    "vm.watermark_scale_factor" = 125;
+  };
   };
 
   fileSystems = {
@@ -113,7 +118,7 @@
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 35;
+    memoryPercent = 150;
   };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

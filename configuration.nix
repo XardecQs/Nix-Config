@@ -199,7 +199,6 @@
 
   #/--------------------/ Programas habilitados /--------------------/#
   programs = {
-    wayfire.enable = true;
     firejail.enable = true;
     obs-studio.enableVirtualCamera = true;
     kdeconnect = {
@@ -254,6 +253,18 @@
     };
     groups.waydroid.gid = 1023;
   };
+
+  environment.etc = {
+  "wayland-sessions/mi-sesion-custom.desktop".text = ''
+    [Desktop Entry]
+    Name=Mi Sesión Custom Wayland
+    Comment=Wayland con flags especiales
+    Exec=/run/current-system/sw/bin/gamescope --adaptive-sync --exit-on-last-window -- steam -gamepadui -steamos
+
+    Type=Application
+    DesktopNames=CustomWayland
+  '';
+};
 
   #/--------------------/ Bindfs (opcional para Waydroid) - Comentado /--------------------/#
   # fileSystems = { ... };  # Descomenta si necesitas compartir carpetas con Waydroid

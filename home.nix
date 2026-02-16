@@ -27,9 +27,7 @@ in
 {
   imports = [
     ./home/gnome.nix
-    ./home/packages.nix
-    ./home/programs.nix
-    ./home/services.nix
+    ./home/features.nix
   ];
 
   home = {
