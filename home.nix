@@ -18,7 +18,7 @@ let
     ".config/user-dirs.dirs" = "config/user-dirs.dirs";
     ".icons" = "homedots/icons";
     ".local/share/icons" = "homedots/icons";
-    ".vscode" = "homedots/vscode";
+    ".config/Code/User/settings.json" = "homedots/vscode/settings.json";
     ".config/tmux" = "config/tmux";
     ".local/share/fonts" = "homedots/fonts";
     ".zshrc" = "homedots/zshrc";
@@ -39,7 +39,7 @@ in
   # Clonación de dotfiles
   home.activation.cloneDotfiles = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -d "${dotfiles}" ]; then
-      ${pkgs.git}/bin/git clone https://github.com/XardecQs/dotfiles.git "${dotfiles}"
+      ${pkgs.git}/bin/git clone --depth 1 https://github.com/XardecQs/dotfiles.git "${dotfiles}"
     fi
   '';
 
