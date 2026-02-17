@@ -18,7 +18,7 @@ let
     ".config/user-dirs.dirs" = "config/user-dirs.dirs";
     ".icons" = "homedots/icons";
     ".local/share/icons" = "homedots/icons";
-    ".config/Code/User/settings.json" = "homedots/vscode/settings.json";
+    ".config/Code/User/settings.json" = "config/vscode/settings.json";
     ".config/tmux" = "config/tmux";
     ".local/share/fonts" = "homedots/fonts";
     ".zshrc" = "homedots/zshrc";
