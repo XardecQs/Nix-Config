@@ -1,6 +1,28 @@
 { pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    gnomeExtensions.gsconnect
+    gnomeExtensions.blur-my-shell
+    gnomeExtensions.dash-to-dock
+    gnomeExtensions.user-themes
+    gnomeExtensions.rounded-window-corners-reborn
+    gnomeExtensions.auto-adwaita-colors
+    gnomeExtensions.fullscreen-hot-corner
+    gnomeExtensions.clipboard-indicator
+    gnomeExtensions.caffeine
+    gnomeExtensions.tray-icons-reloaded
+    gnomeExtensions.emoji-copy
+    gnomeExtensions.logo-menu
+    unstable.gnomeExtensions.maximize-window-into-new-workspace
+    unstable.gnomeExtensions.gtk4-desktop-icons-ng-ding
+
+    gnome-tweaks
+    gnome-extension-manager
+    dconf-editor
+    nautilus-python
+
+  ];
   # Habilitar GTK y Qt para coherencia visual
   gtk = {
     enable = true;

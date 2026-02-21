@@ -1,43 +1,24 @@
 { config, pkgs, ... }:
 {
   imports = [
-    ./hardware-configuration.nix
+    ./hosts/NeoReaper/hardware-configuration.nix
+    ./modules/nixos
   ];
 
-  #/--------------------/ Versión y locale básico /--------------------/#
+    
+  networking.hostName = "NeoReaper";
   system.stateVersion = "25.11";
   time.timeZone = "America/Lima";
   i18n.defaultLocale = "es_PE.UTF-8";
   console.keyMap = "la-latin1";
 
-  #/--------------------/ Nix (optimización y flakes) /--------------------/#
-  nixpkgs.config.allowUnfree = true;
-
-  nix = {
-    #optimise.automatic = true;
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-    settings = {
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      auto-optimise-store = true;
-      warn-dirty = false;
-    };
-  };
-
   #/--------------------/ Red /--------------------/#
   networking = {
-    hostName = "NeoReaper";
     networkmanager.enable = true;
+    firewall = {
+      allowedTCPPorts = [ 4242 ];
+      allowedUDPPorts = [ 4242 ];
+    };
   };
 
   #/--------------------/ Boot /--------------------/#
@@ -195,6 +176,7 @@
     nix-ld
     bubblewrap
     neovim
+    lan-mouse
   ];
 
   #/--------------------/ Programas habilitados /--------------------/#
@@ -218,6 +200,7 @@
       binfmt = true;
     };
     zsh.enable = true;
+    sway.enable = true;
   };
 
   #/--------------------/ Usuarios y grupos /--------------------/#
@@ -255,16 +238,16 @@
   };
 
   environment.etc = {
-  "wayland-sessions/mi-sesion-custom.desktop".text = ''
-    [Desktop Entry]
-    Name=Mi Sesión Custom Wayland
-    Comment=Wayland con flags especiales
-    Exec=/run/current-system/sw/bin/gamescope --adaptive-sync --exit-on-last-window -- steam -gamepadui -steamos
+    "wayland-sessions/mi-sesion-custom.desktop".text = ''
+      [Desktop Entry]
+      Name=Mi Sesión Custom Wayland
+      Comment=Wayland con flags especiales
+      Exec=/run/current-system/sw/bin/gamescope --adaptive-sync --exit-on-last-window -- steam -gamepadui -steamos
 
-    Type=Application
-    DesktopNames=CustomWayland
-  '';
-};
+      Type=Application
+      DesktopNames=CustomWayland
+    '';
+  };
 
   #/--------------------/ Bindfs (opcional para Waydroid) - Comentado /--------------------/#
   # fileSystems = { ... };  # Descomenta si necesitas compartir carpetas con Waydroid
