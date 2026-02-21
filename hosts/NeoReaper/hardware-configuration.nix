@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   modulesPath,
@@ -11,6 +12,18 @@
   ];
 
   boot = {
+    tmp = {
+      useTmpfs = true;
+      cleanOnBoot = true;
+    };
+
+    loader = {
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot/efi";
+      };
+    };
+
     initrd.availableKernelModules = [
       "xhci_pci"
       "ahci"
@@ -28,7 +41,7 @@
       "i915.enable_fbc=1"
     ];
     kernel.sysctl = {
-      "vm.swappiness" = 100; # Agresividad para usar ZRAM antes que el disco
+      "vm.swappiness" = 100;
       "vm.watermark_boost_factor" = 0;
       "vm.watermark_scale_factor" = 125;
     };
