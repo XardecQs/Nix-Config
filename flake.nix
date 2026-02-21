@@ -29,7 +29,6 @@
     let
       system = "x86_64-linux";
 
-      # Overlay para acceder a paquetes unstable fácilmente
       unstableOverlay = final: prev: {
         unstable = import nixpkgs-unstable {
           inherit system;
@@ -37,7 +36,6 @@
         };
       };
 
-      # Función para generar la configuración de cada PC
       mkHost =
         hostname: extraModules:
         nixpkgs-stable.lib.nixosSystem {
@@ -45,10 +43,7 @@
           specialArgs = { inherit inputs; };
 
           modules = [
-            # 1. Punto de entrada de cada host (configuration.nix específico)
             ./hosts/${hostname}/configuration.nix
-
-            # 3. Integración de Home Manager
             home-manager.nixosModules.home-manager
             {
               nixpkgs.config.allowUnfree = true;
@@ -59,7 +54,6 @@
                 useUserPackages = true;
                 extraSpecialArgs = { inherit inputs; };
 
-                # Cargamos el home.nix específico del host
                 users.xardec = {
                   imports = [
                     ./hosts/${hostname}/home.nix
