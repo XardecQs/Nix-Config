@@ -1,11 +1,6 @@
-{ config, pkgs, ... }:
-
-let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz";
-in
+{ pkgs, ... }:
 {
   imports = [
-    (import "${home-manager}/nixos")
     ./hardware-configuration.nix
   ];
 
@@ -208,12 +203,4 @@ in
       exec sway
     fi
   '';
-
-  #/--------------------/ Home Manager /--------------------/#
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    
-    users.xardec = import ./home.nix;
-  };
 }
