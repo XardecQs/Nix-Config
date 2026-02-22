@@ -11,8 +11,5 @@
       enableRedistributableFirmware = true;
       cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
     };
-    services = {
-      spice-vdagentd.enable = true;
-    };
   };
 }

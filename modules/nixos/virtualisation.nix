@@ -7,7 +7,6 @@
       libvirtd.enable = true;
       docker.enable = true;
     };
-
     users = {
       users.xardec = {
         extraGroups = [
@@ -15,6 +14,9 @@
           "libvirtd"
         ];
       };
+    };
+    services = {
+      spice-vdagentd.enable = true;
     };
   };
 }
