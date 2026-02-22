@@ -24,16 +24,19 @@ let
     ".zshrc" = "homedots/zshrc";
   };
 in
-
 {
-  home.activation.cloneDotfiles = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ ! -d "${dotfiles}" ]; then
-      ${pkgs.git}/bin/git clone --depth 1 https://github.com/XardecQs/dotfiles.git "${dotfiles}"
-    fi
-  '';
+  options.modulos.home-manager.dotfiles.enable = lib.mkEnableOption "dotfiles";
 
-  home.file = builtins.mapAttrs (name: subpath: {
-    source = create_symlink "${dotfiles}/${subpath}";
-    recursive = true;
-  }) configs;
+  config = lib.mkIf config.modulos.home-manager.dotfiles.enable {
+    home.activation.cloneDotfiles = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ ! -d "${dotfiles}" ]; then
+        ${pkgs.git}/bin/git clone --depth 1 https://github.com/XardecQs/dotfiles.git "${dotfiles}"
+      fi
+    '';
+
+    home.file = builtins.mapAttrs (name: subpath: {
+      source = create_symlink "${dotfiles}/${subpath}";
+      recursive = true;
+    }) configs;
+  };
 }

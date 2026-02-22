@@ -9,4 +9,17 @@
     username = "xardec";
     homeDirectory = "/home/xardec";
   };
+
+  modulos = {
+    home-manager = {
+      dotfiles.enable = true;
+      flatpak.enable = true;
+      gnome.enable = true;
+      java.enable = true;
+      obs.enable = true;
+      packages.enable = true;
+      spicetify.enable = true;
+      syncthing.enable = true;
+    };
+  };
 }

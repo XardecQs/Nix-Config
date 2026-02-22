@@ -1,16 +1,20 @@
-{ ... }:
+{ lib, config, ... }:
 {
-  virtualisation = {
-    libvirtd.enable = true;
-    docker.enable = true;
-  };
+  options.modulos.sistema.virtualisation.enable = lib.mkEnableOption "virtualisation";
 
-  users = {
-    users.xardec = {
-      extraGroups = [
-        "docker"
-        "libvirtd"
-      ];
+  config = lib.mkIf config.modulos.sistema.virtualisation.enable {
+    virtualisation = {
+      libvirtd.enable = true;
+      docker.enable = true;
+    };
+
+    users = {
+      users.xardec = {
+        extraGroups = [
+          "docker"
+          "libvirtd"
+        ];
+      };
     };
   };
 }

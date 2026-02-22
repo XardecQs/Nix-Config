@@ -1,114 +1,123 @@
-{ pkgs, ... }:
 {
-  home.packages = with pkgs; [
-    # CLI & Utilidades
-    git
-    gh
-    wget
-    bat
-    btop
-    fzf
-    fd
-    unzip
-    unimatrix
-    tmux
-    jp2a
-    libicns
-    zoxide
-    lsd
-    fastfetch
-    gdu
-    yazi
-    home-manager
-    p7zip
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+{
+  options.modulos.home-manager.packages.enable = lib.mkEnableOption "packages";
 
-    # Aplicaciones de escritorio
-    kitty
-    github-desktop
-    zenity
+  config = lib.mkIf config.modulos.home-manager.packages.enable {
+    home.packages = with pkgs; [
+      # CLI & Utilidades
+      git
+      gh
+      wget
+      bat
+      btop
+      fzf
+      fd
+      unzip
+      unimatrix
+      tmux
+      jp2a
+      libicns
+      zoxide
+      lsd
+      fastfetch
+      gdu
+      yazi
+      home-manager
+      p7zip
 
-    # Multimedia
-    krita
-    inkscape
-    ffmpegthumbnailer
-    gthumb
-    unstable.audacity
-    unstable.libresprite
-    blender
-    losslesscut-bin
-    cava
-    youtube-music
-    easyeffects
+      # Aplicaciones de escritorio
+      kitty
+      github-desktop
+      zenity
 
-    # Desarrollo
-    binutils
-    gnumake
-    cmake
-    nodejs
-    python3
-    nixfmt-rfc-style
-    texliveFull
-    cargo
-    rust-analyzer
-    rustfmt
-    clippy
-    pkg-config
-    openssl
-    gcc
-    rustc
-    glibc.static
-    upx
-    arduino
-    arduino-cli
-    unstable.vscode
-    unstable.godot
+      # Multimedia
+      krita
+      inkscape
+      ffmpegthumbnailer
+      gthumb
+      unstable.audacity
+      unstable.libresprite
+      blender
+      losslesscut-bin
+      cava
+      youtube-music
+      easyeffects
 
-    # Sistema y virtualización
-    podman
-    distrobox
-    virt-manager
-    virt-viewer
-    spice
-    spice-gtk
-    spice-protocol
-    virtio-win
-    win-spice
-    freerdp
-    qemu
-    libvirt
-    swtpm
-    realcugan-ncnn-vulkan
-    realesrgan-ncnn-vulkan
-    android-tools
-    alsa-utils
-    desktop-file-utils
-    appimage-run
-    hardinfo2
-    gamemode
-    mangohud
+      # Desarrollo
+      binutils
+      gnumake
+      cmake
+      nodejs
+      python3
+      nixfmt-rfc-style
+      texliveFull
+      cargo
+      rust-analyzer
+      rustfmt
+      clippy
+      pkg-config
+      openssl
+      gcc
+      rustc
+      glibc.static
+      upx
+      arduino
+      arduino-cli
+      unstable.vscode
+      unstable.godot
 
-    # Temas y fuentes
-    nerd-fonts.jetbrains-mono
-    papirus-icon-theme
-    marble-shell-theme
-    adw-gtk3
+      # Sistema y virtualización
+      podman
+      distrobox
+      virt-manager
+      virt-viewer
+      spice
+      spice-gtk
+      spice-protocol
+      virtio-win
+      win-spice
+      freerdp
+      qemu
+      libvirt
+      swtpm
+      realcugan-ncnn-vulkan
+      realesrgan-ncnn-vulkan
+      android-tools
+      alsa-utils
+      desktop-file-utils
+      appimage-run
+      hardinfo2
+      gamemode
+      mangohud
 
-    # Gaming
-    wineWowPackages.stableFull
-    winetricks
-    protonup-ng
-    unstable.lutris
-    unstable.heroic
-    snes9x-gtk
-    mangohud
+      # Temas y fuentes
+      nerd-fonts.jetbrains-mono
+      papirus-icon-theme
+      marble-shell-theme
+      adw-gtk3
 
-    # Comunicación y misc
-    qbittorrent
-    peazip
-    resources
-    gnome-network-displays
-    hydralauncher
-    waydroid
-    waydroid-helper
-  ];
+      # Gaming
+      wineWowPackages.stableFull
+      winetricks
+      protonup-ng
+      unstable.lutris
+      unstable.heroic
+      snes9x-gtk
+      mangohud
+
+      # Comunicación y misc
+      qbittorrent
+      peazip
+      resources
+      gnome-network-displays
+      hydralauncher
+      waydroid
+      waydroid-helper
+    ];
+  };
 }

@@ -1,24 +1,27 @@
-{ ... }:
+{ lib, config, ... }:
 {
-  nixpkgs.config.allowUnfree = true;
+  options.modulos.sistema.nix.enable = lib.mkEnableOption "Configuraciones de Nix";
 
-  nix = {
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
-    settings = {
-      trusted-users = [
-        "root"
-        "@wheel"
-      ];
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      auto-optimise-store = true;
-      warn-dirty = false;
+  config = lib.mkIf config.modulos.sistema.nix.enable {
+    nixpkgs.config.allowUnfree = true;
+    nix = {
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 7d";
+      };
+      settings = {
+        trusted-users = [
+          "root"
+          "@wheel"
+        ];
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        auto-optimise-store = true;
+        warn-dirty = false;
+      };
     };
   };
 }

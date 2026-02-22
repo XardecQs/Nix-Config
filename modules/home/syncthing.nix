@@ -1,5 +1,8 @@
-{ ... }:
+{ lib, config, ... }:
 {
+  options.modulos.home-manager.syncthing.enable = lib.mkEnableOption "syncthing";
+
+  config = lib.mkIf config.modulos.home-manager.syncthing.enable {
   services = {
     syncthing = {
       enable = true;
@@ -31,4 +34,5 @@
       };
     };
   };
+};
 }
