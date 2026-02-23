@@ -9,33 +9,34 @@
 
   config = lib.mkIf config.modulos.sistema.systemPackages.enable {
     environment.systemPackages = with pkgs; [
-      btrfs-progs
-      gparted
-      bindfs
-      kitty
-      wget
-      tree
+      adw-gtk3
       bat
       btop
-      fzf
-      fd
-      unzip
-      wl-clipboard
-      unimatrix
-      tmux
-      zoxide
-      lsd
       fastfetch
+      fzf
       gdu
-      yazi
-      entr
-      direnv
+      lan-mouse
+      lsd
+      neovim
       nixd
+      tmux
+      unzip
+      wget
+      wl-clipboard
+      yazi
+      zoxide
+      #---#
+      bindfs
+      btrfs-progs
+      bubblewrap
+      direnv
+      entr
+      fd
+      gparted
       nil
       nix-ld
-      bubblewrap
-      neovim
-      lan-mouse
+      tree
+      unimatrix
     ];
   };
 }

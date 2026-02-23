@@ -14,5 +14,7 @@
     ./users.nix
     ./virtualisation.nix
     ./waydroid.nix
+    ./pipewire.nix
+    ./security.nix
   ];
 }

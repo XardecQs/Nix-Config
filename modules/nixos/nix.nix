@@ -1,8 +1,12 @@
 { lib, config, ... }:
+let
+  category = "sistema"; # [ sistema | home-manager ]
+  moduleName = "nix";
+in
 {
-  options.modulos.sistema.nix.enable = lib.mkEnableOption "Configuraciones de Nix";
+  options.modulos.${category}.${moduleName}.enable = lib.mkEnableOption moduleName;
 
-  config = lib.mkIf config.modulos.sistema.nix.enable {
+  config = lib.mkIf config.modulos.${category}.${moduleName}.enable {
     nixpkgs.config.allowUnfree = true;
     nix = {
       gc = {
@@ -21,6 +25,16 @@
         ];
         auto-optimise-store = true;
         warn-dirty = false;
+      }
+      // lib.optionalAttrs (config.networking.hostName == "PC-Hogar") {
+        cores = 1;
+      };
+    };
+    programs = {
+      nix-ld.enable = true;
+      appimage = {
+        enable = true;
+        binfmt = true;
       };
     };
   };

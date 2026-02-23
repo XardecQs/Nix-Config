@@ -1,10 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   username = "xardec";
   homeDir = "/home/${username}";
   dotfiles = "${homeDir}/.dotfiles";
-  
+
   # Función para crear symlinks fuera del Nix Store
   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
 
@@ -33,21 +38,32 @@ in
     stateVersion = "25.11";
     username = username;
     homeDirectory = homeDir;
-    
+
     packages = with pkgs; [
-    xfce.xfdesktop
-    xfce.xfce4-appfinder
-    github-desktop
-    librewolf
-    nautilus
-    rofi
-    waybar
-    pywal16
-    imagemagick
-    unimatrix
-    libretro.snes9x
-    libretro.neocd
-    libretro.mgba
+      alacritty
+      gcc
+      git
+      github-desktop
+      gnumake
+      imagemagick
+      libretro.mgba
+      libretro.neocd
+      libretro.snes9x
+      librewolf
+      nautilus
+      nodejs
+      papirus-icon-theme
+      pciutils
+      python3
+      pywal16
+      ripgrep
+      rofi
+      unimatrix
+      usbutils
+      waybar
+      wofi
+      xfce.xfce4-appfinder
+      xfce.xfdesktop
     ];
   };
 
@@ -69,23 +85,4 @@ in
 
   #/--------------------/ Program Configuration /--------------------/#
   programs.retroarch.enable = true;
-
-  # Descomenta según necesites
-  # programs = {
-  #   git = {
-  #     enable = true;
-  #     userName = "XardecQs";
-  #     userEmail = "tu@email.com";
-  #   };
-  #   
-  #   zsh = {
-  #     enable = true;
-  #     # Configuración adicional de zsh
-  #   };
-  #   
-  #   neovim = {
-  #     enable = true;
-  #     # Configuración adicional de neovim
-  #   };
-  # };
 }
