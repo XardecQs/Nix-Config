@@ -9,9 +9,12 @@
 
   modulos = {
     sistema = {
+      escritorio = {
+        gnome.enable = true;
+        sway.enable = false;
+      };
       boot.enable = true;
       general.enable = true;
-      gnome.enable = true;
       intel-gpu.enable = true;
       laptop.enable = true;
       locate.enable = true;
@@ -48,7 +51,6 @@
   programs = {
     firejail.enable = true;
     obs-studio.enableVirtualCamera = true;
-    sway.enable = true;
   };
 
 }

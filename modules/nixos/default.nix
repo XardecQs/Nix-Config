@@ -1,9 +1,10 @@
 { ... }:
 {
   imports = [
+    ./escritorios/gnome.nix
+    ./escritorios/sway.nix
     ./boot.nix
     ./general.nix
-    ./gnome.nix
     ./intel-gpu.nix
     ./laptop.nix
     ./locate.nix
