@@ -20,6 +20,7 @@
           "org.onlyoffice.desktopeditors"
           "it.mijorus.gearlever"
           "io.github.Querz.mcaselector"
+          "com.usebottles.bottles"
         ];
       };
     };
