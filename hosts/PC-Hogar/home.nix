@@ -1,5 +1,8 @@
 { pkgs, ... }:
 {
+  imports = [
+    ./../../modules/home
+  ];
   #/--------------------/ Home Manager Settings /--------------------/#
   home = {
     stateVersion = "25.11";
