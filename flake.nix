@@ -16,6 +16,10 @@
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    elyprismlauncher = {
+      url = "github:ElyPrismLauncher/ElyPrismLauncher";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
   };
 
   outputs =

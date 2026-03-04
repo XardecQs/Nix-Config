@@ -13,8 +13,6 @@ in
   options.modulos.${category}.${subcategory}.${moduleName}.enable = lib.mkEnableOption moduleName;
 
   config = lib.mkIf config.modulos.${category}.${subcategory}.${moduleName}.enable {
-    #services.xserver.enable = true;
-
     xdg.portal = {
       enable = true;
       wlr.enable = true;
