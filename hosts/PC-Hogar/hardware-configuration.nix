@@ -27,7 +27,7 @@
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/aeec6a81-21d2-4cc3-adbe-00e5a35dce30";
+    device = "/dev/disk/by-uuid/6de86424-3a1a-4c5f-aac5-69956f87c299";
     fsType = "btrfs";
     options = [
       "subvol=@"
@@ -38,7 +38,7 @@
   };
 
   fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/4E44-BCA0";
+    device = "/dev/disk/by-uuid/416C-9D95";
     fsType = "vfat";
     options = [
       "fmask=0022"
@@ -47,7 +47,7 @@
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/aeec6a81-21d2-4cc3-adbe-00e5a35dce30";
+    device = "/dev/disk/by-uuid/6de86424-3a1a-4c5f-aac5-69956f87c299";
     fsType = "btrfs";
     options = [
       "subvol=@home"
@@ -58,7 +58,7 @@
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/5cf9a76b-901f-4b07-aaee-3b2339536b04"; }
+    { device = "/dev/disk/by-uuid/dd7388ba-9e93-41d9-807c-c56b99300eff"; }
   ];
 
   zramSwap = {
