@@ -32,8 +32,6 @@
       usbutils
       waybar
       wofi
-      xfce.xfce4-appfinder
-      xfce.xfdesktop
     ];
   };
 
@@ -47,6 +45,7 @@
       packages.enable = false;
       spicetify.enable = false;
       syncthing.enable = false;
+      lan-mouse.enable = true;
     };
   };
 

@@ -20,6 +20,7 @@
       packages.enable = true;
       spicetify.enable = true;
       syncthing.enable = true;
+      lan-mouse.enable = true;
     };
   };
 }

@@ -20,6 +20,10 @@
       url = "github:ElyPrismLauncher/ElyPrismLauncher";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
+    lan-mouse = {
+      url = "github:feschber/lan-mouse";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; 
+    };
   };
 
   outputs =

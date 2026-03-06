@@ -15,7 +15,6 @@
       fastfetch
       fzf
       gdu
-      lan-mouse
       lsd
       neovim
       nixd

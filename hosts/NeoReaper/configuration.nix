@@ -51,6 +51,7 @@
   programs = {
     firejail.enable = true;
     obs-studio.enableVirtualCamera = true;
+    dconf.enable = true;
   };
 
 }

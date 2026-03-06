@@ -131,8 +131,6 @@ in
       resources
       gnome-network-displays
       hydralauncher
-      waydroid
-      waydroid-helper
     ];
   };
 }

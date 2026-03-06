@@ -9,5 +9,6 @@
     ./packages.nix
     ./spicetify.nix
     ./syncthing.nix
+    ./lan-mouse.nix
   ];
 }

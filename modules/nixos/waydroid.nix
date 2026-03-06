@@ -1,9 +1,24 @@
-{ lib, config, ... }:
 {
-  options.modulos.sistema.waydroid.enable = lib.mkEnableOption "waydroid";
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
-  config = lib.mkIf config.modulos.sistema.waydroid.enable {
+let
+  category = "sistema"; # [ sistema | home-manager ]
+  moduleName = "waydroid";
+in
+{
+  options.modulos.${category}.${moduleName}.enable = lib.mkEnableOption moduleName;
+
+  config = lib.mkIf config.modulos.${category}.${moduleName}.enable {
+
     virtualisation.waydroid.enable = true;
+    environment.systemPackages = with pkgs; [
+      unstable.waydroid
+      unstable.waydroid-helper
+    ];
 
     users = {
       users.xardec = {
