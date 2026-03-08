@@ -119,9 +119,9 @@ in
       wineWowPackages.stableFull
       winetricks
       protonup-ng
-      unstable.lutris
-      unstable.heroic
-      snes9x-gtk
+      #unstable.lutris
+      #unstable.heroic
+      #snes9x-gtk
       mangohud
       elyWrapped
 

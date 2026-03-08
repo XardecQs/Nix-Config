@@ -21,6 +21,7 @@
           "it.mijorus.gearlever"
           "io.github.Querz.mcaselector"
           "com.usebottles.bottles"
+          "net.lutris.Lutris"
         ];
       };
     };

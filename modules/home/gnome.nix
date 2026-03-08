@@ -23,6 +23,7 @@
       gnomeExtensions.logo-menu
       unstable.gnomeExtensions.maximize-window-into-new-workspace
       unstable.gnomeExtensions.gtk4-desktop-icons-ng-ding
+      unstable.gnomeExtensions.custom-command-toggle
 
       gnome-tweaks
       gnome-extension-manager
@@ -76,6 +77,7 @@
           emoji-copy.extensionUuid
           logo-menu.extensionUuid
           auto-adwaita-colors.extensionUuid
+          custom-command-toggle.extensionUuid
           "MaximizeWindowIntoNewWorkspace@kyleross.com"
 
         ];

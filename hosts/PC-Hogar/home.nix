@@ -48,7 +48,4 @@
       lan-mouse.enable = true;
     };
   };
-
-  #/--------------------/ Program Configuration /--------------------/#
-  programs.retroarch.enable = true;
 }

@@ -10,5 +10,6 @@
     ./spicetify.nix
     ./syncthing.nix
     ./lan-mouse.nix
+    ./retroarch.nix
   ];
 }
