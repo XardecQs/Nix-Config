@@ -36,6 +36,7 @@
       nix-ld
       tree
       unimatrix
+      hwloc
     ];
   };
 }

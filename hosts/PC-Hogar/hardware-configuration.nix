@@ -17,7 +17,6 @@
       "ata_piix"
       "usbhid"
       "usb_storage"
-      "floppy"
       "sd_mod"
       "sr_mod"
     ];
@@ -25,40 +24,29 @@
     kernelModules = [ ];
     extraModulePackages = [ ];
   };
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/6de86424-3a1a-4c5f-aac5-69956f87c299";
-    fsType = "btrfs";
-    options = [
-      "subvol=@"
-      "compress=zstd"
-      "autodefrag"
-      "space_cache=v2"
-    ];
-  };
-
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/416C-9D95";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/6de86424-3a1a-4c5f-aac5-69956f87c299";
-    fsType = "btrfs";
-    options = [
-      "subvol=@home"
-      "compress=zstd"
-      "autodefrag"
-      "space_cache=v2"
-    ];
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/af951a26-3b54-4931-bfd8-c9e6dced032a";
+      fsType = "btrfs";
+      options = [ "subvol=@" ];
+    };
+    "/home" = {
+      device = "/dev/disk/by-uuid/af951a26-3b54-4931-bfd8-c9e6dced032a";
+      fsType = "btrfs";
+      options = [ "subvol=@home" ];
+    };
+    "/boot/efi" = {
+      device = "/dev/disk/by-uuid/02E7-A176";
+      fsType = "vfat";
+      options = [
+        "fmask=0077"
+        "dmask=0077"
+      ];
+    };
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/dd7388ba-9e93-41d9-807c-c56b99300eff"; }
+    { device = "/dev/disk/by-uuid/3114dfe8-e5b0-4b96-8ff4-7a29a976ae79"; }
   ];
 
   zramSwap = {
