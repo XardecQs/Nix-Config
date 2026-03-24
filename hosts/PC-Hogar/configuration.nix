@@ -81,4 +81,24 @@
     #};
     gnome.gnome-keyring.enable = true;
   };
+
+  systemd.services.boot-beep = {
+    description = "Beep when system is ready for SSH";
+    after = [
+      "multi-user.target"
+      "network-online.target"
+      "sshd.service"
+    ];
+    wants = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      RemainAfterExit = false;
+    };
+    script = ''
+      sleep 3
+      ${pkgs.beep}/bin/beep -f 1000 -l 200 -r 3 -D 100 2>/dev/null || true
+    '';
+  };
 }

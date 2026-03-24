@@ -37,6 +37,7 @@
       tree
       unimatrix
       hwloc
+      beep
     ];
   };
 }

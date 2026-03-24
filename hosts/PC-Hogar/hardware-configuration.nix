@@ -21,7 +21,7 @@
       "sr_mod"
     ];
     initrd.kernelModules = [ ];
-    kernelModules = [ ];
+    kernelModules = [ "pcspkr" ];
     extraModulePackages = [ ];
   };
   fileSystems = {
