@@ -10,28 +10,28 @@
     homeDirectory = "/home/xardec";
 
     packages = with pkgs; [
-      alacritty
+      #alacritty
       gcc
       git
-      github-desktop
+      #github-desktop
       gnumake
       imagemagick
-      libretro.mgba
-      libretro.neocd
-      libretro.snes9x
-      librewolf
-      nautilus
+      #libretro.mgba
+      #libretro.neocd
+      #libretro.snes9x
+      #librewolf
+      #nautilus
       nodejs
-      papirus-icon-theme
+      #papirus-icon-theme
       pciutils
       python3
       pywal16
       ripgrep
       rofi
-      unimatrix
+      #unimatrix
       usbutils
-      waybar
-      wofi
+      #waybar
+      #wofi
     ];
   };
 

@@ -84,6 +84,8 @@
         "Descargas"
         "Documentos"
         "Media"
+        "Juegos"
+        "Proyectos"
       ];
     };
   };

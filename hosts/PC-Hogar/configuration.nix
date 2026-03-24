@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -28,7 +28,7 @@
         gnome.enable = false;
         sway.enable = false;
       };
-      boot.enable = true;
+      boot.enable = false;
       general.enable = true;
       intel-gpu.enable = true;
       laptop.enable = false;
@@ -43,6 +43,31 @@
       pipewire.enable = true;
       security.enable = true;
       servidor.enable = true;
+    };
+  };
+
+  #/--------------------/ Boot /--------------------/#
+
+  boot = {
+    kernelPackages = pkgs.linuxPackages_lts;
+    loader = {
+      timeout = 0;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 5;
+        consoleMode = "max";
+      };
+    };
+    kernel.sysctl = {
+      "vm.swappiness" = 100;
+      "vm.watermark_boost_factor" = 0;
+      "vm.watermark_scale_factor" = 125;
+    };
+    loader = {
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot/efi";
+      };
     };
   };
 
