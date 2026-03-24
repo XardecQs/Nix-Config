@@ -9,7 +9,7 @@
 let
   elyWrapped = pkgs.symlinkJoin {
     name = "elyprismlauncher-wrapped";
-    paths = [ inputs.elyprismlauncher.packages.${pkgs.system}.default ];  # o .elyprismlauncher si es el atributo
+    paths = [ inputs.elyprismlauncher.packages.${pkgs.system}.default ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/elyprismlauncher \
@@ -23,6 +23,7 @@ in
 
   config = lib.mkIf config.modulos.home-manager.packages.enable {
     home.packages = with pkgs; [
+
       # CLI & Utilidades
       git
       gh
@@ -47,20 +48,18 @@ in
       # Aplicaciones de escritorio
       kitty
       github-desktop
-      zenity
 
       # Multimedia
-      krita
-      inkscape
-      ffmpegthumbnailer
-      gthumb
-      unstable.audacity
-      unstable.libresprite
-      blender
-      losslesscut-bin
-      cava
-      youtube-music
-      easyeffects
+      #krita
+      #inkscape
+      #ffmpegthumbnailer
+      #unstable.audacity
+      #unstable.libresprite
+      #blender
+      #losslesscut-bin
+      #cava
+      #youtube-music
+      #easyeffects
 
       # Desarrollo
       binutils
@@ -80,57 +79,46 @@ in
       rustc
       glibc.static
       upx
-      arduino
-      arduino-cli
+      #arduino
+      #arduino-cli
       unstable.vscode
-      unstable.godot
+      #unstable.godot
 
       # Sistema y virtualización
-      podman
-      distrobox
-      virt-manager
-      virt-viewer
-      spice
-      spice-gtk
-      spice-protocol
-      virtio-win
-      win-spice
-      freerdp
-      qemu
-      libvirt
-      swtpm
-      realcugan-ncnn-vulkan
-      realesrgan-ncnn-vulkan
-      android-tools
-      alsa-utils
-      desktop-file-utils
-      appimage-run
-      hardinfo2
-      gamemode
-      mangohud
-
-      # Temas y fuentes
-      nerd-fonts.jetbrains-mono
-      papirus-icon-theme
-      marble-shell-theme
-      adw-gtk3
+      #podman
+      #distrobox
+      #virt-manager
+      #virt-viewer
+      #spice
+      #spice-gtk
+      #spice-protocol
+      #virtio-win
+      #win-spice
+      #freerdp
+      #qemu
+      #libvirt
+      #swtpm
+      #realcugan-ncnn-vulkan
+      #realesrgan-ncnn-vulkan
+      #android-tools
+      #alsa-utils
+      #desktop-file-utils
+      #appimage-run
+      #hardinfo2
+      #gamemode
+      #mangohud
 
       # Gaming
-      wineWowPackages.stableFull
-      winetricks
+      #wineWowPackages.stableFull
+      #winetricks
       protonup-ng
-      #unstable.lutris
-      #unstable.heroic
-      #snes9x-gtk
-      mangohud
       elyWrapped
 
       # Comunicación y misc
-      qbittorrent
-      peazip
-      resources
-      gnome-network-displays
-      hydralauncher
+      #qbittorrent
+      #peazip
+
+      #hydralauncher
     ];
   };
 }

@@ -13,7 +13,7 @@ let
     ".config/kitty" = "${dotfiles}/config/kitty";
     ".config/fastfetch" = "${dotfiles}/config/fastfetch";
     ".config/zsh" = "${dotfiles}/config/zsh";
-    ".config/user-dirs.dirs" = "${dotfiles}/config/user-dirs.dirs";
+    #".config/user-dirs.dirs" = "${dotfiles}/config/user-dirs.dirs";
     ".icons" = "${dotfiles}/homedots/icons";
     ".local/share/icons" = "${dotfiles}/homedots/icons";
     ".config/Code/User/settings.json" = "${dotfiles}/config/code/settings.json";
@@ -29,19 +29,35 @@ in
   options.modulos.home-manager.dotfiles.enable = lib.mkEnableOption "dotfiles";
   config = lib.mkIf config.modulos.home-manager.dotfiles.enable {
     home.activation.cloneDotfiles = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      if [ ! -d "${dotfiles}" ]; then
-        ${pkgs.git}/bin/git clone --depth 1 https://github.com/XardecQs/dotfiles.git "${dotfiles}"
+      DOTFILES_DIR="${dotfiles}"
+      if [ ! -d "$DOTFILES_DIR" ]; then
+        ${pkgs.git}/bin/git clone --progress --depth 1 https://github.com/XardecQs/dotfiles.git "$DOTFILES_DIR"
       fi
     '';
+
     home.activation.cloneFonts = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      fonts_dir="$HOME/.local/share/fonts"
-      if [ ! -d "$fonts_dir" ] || [ -z "$(ls -A "$fonts_dir" 2>/dev/null)" ]; then
-        ${pkgs.git}/bin/git clone --depth 1 https://github.com/XardecQs/font-collection.git "$fonts_dir"
+      FONTS_DIR="$HOME/.local/share/fonts"
+      if [ ! -d "$FONTS_DIR" ] || [ -z "$(ls -A "$FONTS_DIR" 2>/dev/null)" ]; then
+        mkdir -p "$FONTS_DIR"
+        ${pkgs.git}/bin/git clone --progress --depth 1 https://github.com/XardecQs/font-collection.git "$FONTS_DIR"
       fi
     '';
     home.file = builtins.mapAttrs (name: abspath: {
       source = create_symlink abspath;
       recursive = true;
     }) configs;
+
+    xdg.userDirs = {
+      enable = true;
+      createDirectories = true;
+      desktop = "$HOME/Documentos/Escritorio";
+      documents = "$HOME/Documentos";
+      download = "$HOME/Descargas";
+      music = "$HOME/Media/Música";
+      pictures = "$HOME/Media/Imágenes";
+      videos = "$HOME/Media/Vídeos";
+      templates = "$HOME/Documentos/Plantillas";
+      publicShare = "$HOME/Documentos/Público";
+    };
   };
 }

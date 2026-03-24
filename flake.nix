@@ -8,21 +8,22 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
-
+    impermanence.url = "github:nix-community/impermanence";
+    
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    affinity-nix.url = "github:mrshmllow/affinity-nix";
-    jovian-nixos = {
-      url = "github:Jovian-Experiments/Jovian-NixOS";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    nixpak = {
+      url = "github:nixpak/nixpak";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    #affinity-nix.url = "github:mrshmllow/affinity-nix";
     elyprismlauncher = {
       url = "github:ElyPrismLauncher/ElyPrismLauncher";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     lan-mouse = {
       url = "github:feschber/lan-mouse";
-      inputs.nixpkgs.follows = "nixpkgs-unstable"; 
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
   };
 
@@ -52,6 +53,7 @@
 
           modules = [
             ./hosts/${hostname}/configuration.nix
+            inputs.impermanence.nixosModules.impermanence
             home-manager.nixosModules.home-manager
             {
               nixpkgs.config.allowUnfree = true;

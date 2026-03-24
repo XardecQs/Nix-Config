@@ -9,8 +9,12 @@
 
   config = lib.mkIf config.modulos.sistema.users.enable {
     users = {
+      mutableUsers = false;
       defaultUserShell = pkgs.zsh;
-      users.root.shell = pkgs.zsh;
+      users.root = {
+        shell = pkgs.zsh;
+        hashedPassword = "$6$xQm6HutX3PwIE0TQ$yTRaUx5z2K7V3Qhfqnf976QwYr5hZYR2uuJsUPkCRiCrEOkZomyUraJ5fJb1LC2j.GCvvzYpRabrVyfjkRIn/1";
+      };
       users.xardec = {
         isNormalUser = true;
         description = "Xavier Del Piero";
@@ -19,6 +23,7 @@
           "wheel"
           "dialout"
         ];
+        hashedPassword = "$6$6kcVeTMDK6yE6XdY$cgvhSqLBhNShREDb.cdNYV0iJS3GpqM.HTjcJKFt864nsnOviqoL6tZah/oamGZe3REqS8q1MQPcxq/76jYTW.";
       };
     };
     programs = {

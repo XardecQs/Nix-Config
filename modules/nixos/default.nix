@@ -17,5 +17,6 @@
     ./waydroid.nix
     ./pipewire.nix
     ./security.nix
+    ./servidor.nix
   ];
 }

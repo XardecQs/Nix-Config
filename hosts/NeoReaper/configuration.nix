@@ -1,11 +1,11 @@
 { pkgs, ... }:
 {
+  networking.hostName = "NeoReaper";
+
   imports = [
     ./hardware-configuration.nix
     ./../../modules/nixos
   ];
-
-  networking.hostName = "NeoReaper";
 
   modulos = {
     sistema = {
@@ -20,11 +20,11 @@
       locate.enable = true;
       networking.enable = true;
       nix.enable = true;
-      steam.enable = true;
+      #steam.enable = true;
       systemPackages.enable = true;
       users.enable = true;
-      virtualisation.enable = true;
-      waydroid.enable = true;
+      #virtualisation.enable = true;
+      #waydroid.enable = true;
       pipewire.enable = true;
       security.enable = true;
     };
@@ -47,11 +47,44 @@
     };
   };
 
-  #/--------------------/ Programas habilitados /--------------------/#
-  programs = {
-    firejail.enable = true;
-    obs-studio.enableVirtualCamera = true;
-    dconf.enable = true;
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    allowTrash = true;
+    directories = [
+      "/var/lib/bluetooth"
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+      "/var/lib/systemd/timers"
+      "/etc/NetworkManager/system-connections"
+      "/etc/nixos"
+      "/var/db/sudo"
+    ];
+    files = [
+      "/etc/machine-id"
+      "/var/cache/locatedb"
+    ];
+    users.xardec = {
+      directories = [
+        ".cache/clipboard-indicator@tudmotu.com"
+        ".config/Code"
+        ".config/dconf"
+        ".config/gsconnect"
+        ".config/gtk-3.0"
+        ".config/retroarch"
+        ".dotfiles"
+        ".local/share/ElyPrismLauncher"
+        ".local/share/flatpak"
+        #".local/share/Trash"
+        ".local/share/fonts"
+        ".local/share/zinit"
+        ".local/state/zsh"
+        ".ssh"
+        ".var"
+        ".vscode"
+        "Descargas"
+        "Documentos"
+        "Media"
+      ];
+    };
   };
-
 }

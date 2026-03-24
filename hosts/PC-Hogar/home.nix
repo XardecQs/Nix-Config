@@ -45,7 +45,7 @@
       packages.enable = false;
       spicetify.enable = false;
       syncthing.enable = false;
-      lan-mouse.enable = true;
+      lan-mouse.enable = false;
     };
   };
 }

@@ -6,12 +6,27 @@
   ];
 
   networking.hostName = "PC-Hogar";
+  networking = {
+    interfaces.enp3s0 = {
+      ipv4.addresses = [
+        {
+          address = "192.168.1.199";
+          prefixLength = 24;
+        }
+      ];
+    };
+    defaultGateway = "192.168.1.1";
+    nameservers = [
+      "192.168.1.1"
+      "8.8.8.8"
+    ];
+  };
 
   modulos = {
     sistema = {
       escritorio = {
         gnome.enable = false;
-        sway.enable = true;
+        sway.enable = false;
       };
       boot.enable = true;
       general.enable = true;
@@ -27,6 +42,7 @@
       waydroid.enable = false;
       pipewire.enable = true;
       security.enable = true;
+      servidor.enable = true;
     };
   };
 
@@ -34,10 +50,10 @@
   services = {
     openssh.enable = true;
     thermald.enable = true;
-    getty = {
-      autologinUser = "xardec";
-      autologinOnce = true;
-    };
+    #getty = {
+    #  autologinUser = "xardec";
+    #  autologinOnce = true;
+    #};
     gnome.gnome-keyring.enable = true;
   };
 }

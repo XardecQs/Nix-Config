@@ -4,114 +4,100 @@
   modulesPath,
   ...
 }:
-
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot = {
-    tmp = {
-      useTmpfs = true;
-      cleanOnBoot = true;
-    };
-    initrd.availableKernelModules = [
-      "xhci_pci"
-      "ahci"
-      "usbhid"
-      "usb_storage"
-      "sd_mod"
-    ];
-    initrd.kernelModules = [ ];
-    kernelModules = [ "kvm-intel" ];
-    extraModulePackages = with config.boot.kernelPackages; [
-      v4l2loopback
-    ];
-    kernelParams = [
-      "i915.enable_psr=0"
-      "i915.enable_fbc=1"
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "usb_storage"
+    "sd_mod"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
+
+  fileSystems."/" = {
+    device = "/dev/mapper/sda2_crypt";
+    fsType = "btrfs";
+    options = [
+      "subvol=@root"
+      "noatime"
+      "compress=zstd"
+      "autodefrag"
+      "space_cache=v2"
     ];
   };
 
-  fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-uuid/1f416b78-cafd-4ad1-a37c-13142bfff2fd";
-      fsType = "btrfs";
-      options = [
-        "subvol=@"
-        "compress=zstd"
-        "autodefrag"
-        "space_cache=v2"
-      ];
-    };
+  boot.initrd.luks.devices."sda2_crypt" = {
+    device = "/dev/disk/by-uuid/08dd846c-4349-47d6-a992-cf2d8424f2ce";
+    preLVM = true;
+  };
 
-    "/boot/efi" = {
-      device = "/dev/disk/by-uuid/4259-FED9";
-      fsType = "vfat";
-      options = [
-        "fmask=0022"
-        "dmask=0022"
-      ];
-    };
+  fileSystems."/nix" = {
+    device = "/dev/mapper/sda2_crypt";
+    fsType = "btrfs";
+    options = [
+      "subvol=@nix"
+      "noatime"
+      "compress=zstd"
+      "autodefrag"
+      "space_cache=v2"
+    ];
+  };
 
-    "/important" = {
-      device = "/dev/disk/by-uuid/1f416b78-cafd-4ad1-a37c-13142bfff2fd";
-      fsType = "btrfs";
-      options = [
-        "subvol=@important"
-        "compress=zstd"
-        "autodefrag"
-        "space_cache=v2"
-      ];
-    };
+  fileSystems."/home" = {
+    device = "/dev/mapper/sda2_crypt";
+    fsType = "btrfs";
+    options = [
+      "subvol=@home"
+      "noatime"
+      "compress=zstd"
+      "autodefrag"
+      "space_cache=v2"
+    ];
+    neededForBoot = true;
+  };
 
-    "/home" = {
-      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
-      fsType = "btrfs";
-      options = [
-        "subvol=@home"
-        "compress=zstd"
-        "autodefrag"
-        "space_cache=v2"
-      ];
-    };
+  fileSystems."/persist" = {
+    device = "/dev/mapper/sda2_crypt";
+    fsType = "btrfs";
+    options = [
+      "subvol=@persist"
+      "noatime"
+      "compress=zstd"
+      "autodefrag"
+      "space_cache=v2"
+    ];
+    neededForBoot = true;
+  };
 
-    "/opt/games" = {
-      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
-      fsType = "btrfs";
-      options = [
-        "subvol=@games"
-        "compress=zstd"
-        "autodefrag"
-        "space_cache=v2"
-      ];
-    };
+  fileSystems."/var/log" = {
+    device = "/dev/mapper/sda2_crypt";
+    fsType = "btrfs";
+    options = [
+      "subvol=@log"
+      "noatime"
+      "compress=zstd"
+      "autodefrag"
+      "space_cache=v2"
+    ];
+  };
 
-    "/srv/backups" = {
-      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
-      fsType = "btrfs";
-      options = [
-        "subvol=@backups"
-        "compress=zstd"
-        "autodefrag"
-        "space_cache=v2"
-      ];
-    };
-
-    "/srv/vms" = {
-      device = "/dev/disk/by-uuid/afe724bc-f57a-4930-b58a-487093804f15";
-      fsType = "btrfs";
-      options = [
-        "subvol=@vms"
-        "compress=zstd"
-        "autodefrag"
-        "space_cache=v2"
-      ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/90A1-010D";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/e6368fbe-43b1-4f57-8bfc-e0fda7849036"; }
+    { device = "/dev/disk/by-uuid/1491cd76-ebbd-4e69-83af-08f067d12470"; }
   ];
 
   zramSwap = {
@@ -120,13 +106,32 @@
     memoryPercent = 150;
   };
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp2s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
+   boot.initrd.postDeviceCommands = lib.mkAfter ''
+    mkdir /btrfs_tmp
+    mount /dev/mapper/sda2_crypt /btrfs_tmp
+
+    timestamp=$(date +%Y-%m-%d_%H-%M-%S)
+    mkdir -p /btrfs_tmp/old_roots
+
+    if [ -e /btrfs_tmp/@root ]; then
+      mv /btrfs_tmp/@root "/btrfs_tmp/old_roots/@root_$timestamp"
+    fi
+
+    ls -1 /btrfs_tmp/old_roots | grep "@root_" | sort | head -n -3 | while read -r old_root; do
+      echo "Eliminando snapshot de root antiguo: $old_root"
+      btrfs subvolume delete -R "/btrfs_tmp/old_roots/$old_root"
+    done
+    
+    btrfs subvolume snapshot /btrfs_tmp/@blank /btrfs_tmp/@root
+
+    if [ -e /btrfs_tmp/@home ]; then
+      mv /btrfs_tmp/@home "/btrfs_tmp/old_roots/@home_$timestamp"
+    fi
+    
+    btrfs subvolume snapshot /btrfs_tmp/@blank /btrfs_tmp/@home
+
+    umount /btrfs_tmp
+  '';
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

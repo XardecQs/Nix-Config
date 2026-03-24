@@ -14,7 +14,7 @@
       gnomeExtensions.dash-to-dock
       gnomeExtensions.user-themes
       gnomeExtensions.rounded-window-corners-reborn
-      gnomeExtensions.auto-adwaita-colors
+      #gnomeExtensions.auto-adwaita-colors
       gnomeExtensions.fullscreen-hot-corner
       gnomeExtensions.clipboard-indicator
       gnomeExtensions.caffeine
@@ -22,7 +22,7 @@
       gnomeExtensions.emoji-copy
       gnomeExtensions.logo-menu
       unstable.gnomeExtensions.maximize-window-into-new-workspace
-      unstable.gnomeExtensions.gtk4-desktop-icons-ng-ding
+      #unstable.gnomeExtensions.gtk4-desktop-icons-ng-ding
       unstable.gnomeExtensions.custom-command-toggle
 
       gnome-tweaks
@@ -30,6 +30,13 @@
       dconf-editor
       nautilus-python
 
+      adw-gtk3
+      marble-shell-theme
+      papirus-icon-theme
+      zenity
+      resources
+      gthumb
+      gnome-network-displays
     ];
     # Habilitar GTK y Qt para coherencia visual
     gtk = {
@@ -56,8 +63,50 @@
         remember-recent-files = false;
       };
 
+      "org/gnome/desktop/datetime" = {
+        automatic-timezone = true;
+      };
+
       "org/gnome/desktop/interface" = {
+        clock-format = "12h";
+        color-scheme = "prefer-dark";
+        cursor-theme = "MacOS-Tahoe-Cursor";
+        font-name = "SF Pro Display 11";
+        gtk-theme = "adw-gtk3-dark";
+        icon-theme = "Definitivo";
         show-battery-percentage = true;
+      };
+
+      "org/gnome/desktop/wm/preferences" = {
+        auto-raise = false;
+        button-layout = "appmenu:minimize,maximize,close";
+        focus-mode = "mouse";
+      };
+
+      "org/gnome/shell/extensions/dash-to-dock" = {
+        apply-custom-theme = true;
+        background-opacity = 0.8;
+        dash-max-icon-size = 56;
+        disable-overview-on-startup = true;
+        dock-position = "BOTTOM";
+        height-fraction = 0.9;
+        hot-keys = false;
+        preferred-monitor = -2;
+        preferred-monitor-by-connector = "eDP-1";
+        show-apps-at-top = true;
+      };
+
+      "org/gnome/shell/extensions/Logo-menu" = {
+        hide-forcequit = false;
+        hide-icon-shadow = false;
+        hide-softwarecentre = true;
+        menu-button-icon-image = 23;
+        menu-button-icon-size = 18;
+        menu-button-system-monitor = "resources";
+        menu-button-terminal = "kitty";
+        show-lockscreen = false;
+        symbolic-icon = true;
+        use-custom-icon = false;
       };
 
       # Extensiones habilitadas
@@ -68,7 +117,7 @@
           user-themes.extensionUuid
           gsconnect.extensionUuid
           blur-my-shell.extensionUuid
-          gtk4-desktop-icons-ng-ding.extensionUuid
+          #gtk4-desktop-icons-ng-ding.extensionUuid
           rounded-window-corners-reborn.extensionUuid
           clipboard-indicator.extensionUuid
           fullscreen-hot-corner.extensionUuid
@@ -76,7 +125,7 @@
           tray-icons-reloaded.extensionUuid
           emoji-copy.extensionUuid
           logo-menu.extensionUuid
-          auto-adwaita-colors.extensionUuid
+          #auto-adwaita-colors.extensionUuid
           custom-command-toggle.extensionUuid
           "MaximizeWindowIntoNewWorkspace@kyleross.com"
 
