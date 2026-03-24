@@ -90,6 +90,7 @@
         ".local/share/gvfs-metadata"
         ".local/share/keyrings"
         ".config/btop"
+        ".local/share/zoxide"
       ];
       files = [
         ".config/mimeapps.list"

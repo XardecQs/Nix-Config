@@ -17,6 +17,8 @@
       gdu
       lsd
       neovim
+      tree-sitter
+      ripgrep
       nixd
       tmux
       unzip

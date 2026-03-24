@@ -6,21 +6,6 @@
   ];
 
   networking.hostName = "PC-Hogar";
-  networking = {
-    interfaces.enp3s0 = {
-      ipv4.addresses = [
-        {
-          address = "192.168.1.199";
-          prefixLength = 24;
-        }
-      ];
-    };
-    defaultGateway = "192.168.1.1";
-    nameservers = [
-      "192.168.1.1"
-      "8.8.8.8"
-    ];
-  };
 
   modulos = {
     sistema = {
@@ -69,43 +54,5 @@
         efiSysMountPoint = "/boot/efi";
       };
     };
-  };
-
-  #/--------------------/ Services /--------------------/#
-  services = {
-    openssh.enable = true;
-    thermald.enable = true;
-    #getty = {
-    #  autologinUser = "xardec";
-    #  autologinOnce = true;
-    #};
-    gnome.gnome-keyring.enable = true;
-  };
-
-  security.wrappers.beep = {
-    owner = "root";
-    group = "wheel";
-    source = "${pkgs.beep}/bin/beep";
-    permissions = "u+rs,g+rs,o+rx";
-  };
-
-  systemd.services.boot-beep = {
-    description = "Beep when system is ready for SSH";
-    after = [
-      "multi-user.target"
-      "network-online.target"
-      "sshd.service"
-    ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      User = "root";
-      RemainAfterExit = false;
-    };
-    script = ''
-      sleep 3
-      ${pkgs.beep}/bin/beep -f 1000 -l 200 -r 3 -D 100 2>/dev/null || true
-    '';
   };
 }
