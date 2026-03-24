@@ -14,38 +14,45 @@ in
 
   config = lib.mkIf config.modulos.${category}.${moduleName}.enable {
 
-    # ===== RED (Configuración Básica e IP Estática) =====
+    # 1. RED Y FIREWALL
     networking = {
-      interfaces.enp3s0 = {
-        ipv4.addresses = [
-          {
-            address = "192.168.1.199";
-            prefixLength = 24;
-          }
-        ];
-      };
+      interfaces.enp3s0.ipv4.addresses = [
+        {
+          address = "192.168.1.199";
+          prefixLength = 24;
+        }
+      ];
       defaultGateway = "192.168.1.1";
       nameservers = [
         "192.168.1.1"
         "8.8.8.8"
       ];
+
       firewall = {
         enable = true;
-        allowedTCPPorts = [ 22 ];
+        allowedTCPPorts = [
+          22 # SSH
+          445 # Samba SMB
+          139 # Samba NetBIOS
+        ];
+        allowedUDPPorts = [
+          137
+          138 # Samba Discovery
+          5353 # mDNS (Avahi)
+        ];
       };
     };
 
-    # ===== GESTIÓN DE ENERGÍA (Optimizado para Servidor) =====
+    # 2. GESTIÓN DE ENERGÍA Y DISCO
     services = {
       auto-cpufreq = {
         enable = true;
-        settings = {
-          charger = {
-            governor = "powersave";
-            turbo = "never";
-          };
+        settings.charger = {
+          governor = "powersave";
+          turbo = "never";
         };
       };
+
       tlp = {
         enable = true;
         settings = {
@@ -59,45 +66,78 @@ in
       thermald.enable = true;
       upower.enable = true;
 
-      # ===== ACCESO REMOTO SEGURO =====
-      openssh = {
-        enable = true;
-        settings = {
-          PermitRootLogin = "no";
-          #PasswordAuthentication = true;
-        };
-      };
-
-      # ===== MANTENIMIENTO BTRFS =====
       btrfs.autoScrub = {
         enable = true;
         interval = "weekly";
       };
     };
 
-    # ===== CONTENEDORES (Motor Minimalista) =====
+    # 3. ACCESO Y DESCUBRIMIENTO (SSH, Samba, Avahi)
+    services = {
+      openssh = {
+        enable = true;
+        settings.PermitRootLogin = "no";
+      };
+
+      # Descubrimiento para que el PC aparezca por nombre en la red
+      avahi = {
+        enable = true;
+        nssmdns4 = true;
+        publish = {
+          enable = true;
+          userServices = true;
+        };
+      };
+
+      # Protocolo para que Windows vea el servidor fácilmente
+      samba-wsdd.enable = true;
+
+      # Servidor de Archivos
+      samba = {
+        enable = true;
+        securityType = "user";
+        extraConfig = ''
+          workgroup = WORKGROUP
+          server string = Servidor NixOS
+          map to guest = never
+        '';
+        shares = {
+          archivos = {
+            path = "/srv/archivos";
+            browseable = "yes";
+            "read only" = "no";
+            "guest ok" = "no";
+            "create mask" = "0644";
+            "directory mask" = "0755";
+            "valid users" = "@users";
+          };
+        };
+      };
+    };
+
+    # 4. VIRTUALIZACIÓN (Motor)
     virtualisation.podman = {
       enable = true;
       dockerCompat = true;
       defaultNetwork.settings.dns_enabled = true;
     };
 
-    # ===== UTILIDADES DE SISTEMA =====
+    # 5. PAQUETES Y UTILIDADES
     environment.systemPackages = with pkgs; [
-      htop # Monitor de recursos
-      powertop # Monitor de energía
-      git # Para tus configs
-      vim # Editor básico
-      pciutils # lspci y herramientas de hardware
+      htop
+      powertop
+      git
+      vim
+      pciutils
+      smbclient
     ];
 
-    # ===== ESTRUCTURA DE DIRECTORIOS BASE =====
+    # 6. AUTOMATIZACIÓN Y DIRECTORIOS
     systemd.tmpfiles.rules = [
       "d /srv/archivos 0755 root users -"
       "d /srv/config 0755 root users -"
     ];
 
-    # ===== AVISO DE ARRANQUE (Beep) =====
     security.wrappers.beep = {
       owner = "root";
       group = "wheel";
@@ -106,7 +146,7 @@ in
     };
 
     systemd.services.boot-beep = {
-      description = "Beep when system is ready for SSH";
+      description = "Beep when system is ready";
       after = [
         "multi-user.target"
         "network-online.target"
