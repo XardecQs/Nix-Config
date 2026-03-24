@@ -130,7 +130,6 @@ in
       git
       vim
       pciutils
-      smbclient
     ];
 
     # 6. AUTOMATIZACIÓN Y DIRECTORIOS
