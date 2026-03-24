@@ -82,6 +82,13 @@
     gnome.gnome-keyring.enable = true;
   };
 
+  security.wrappers.beep = {
+    owner = "root";
+    group = "wheel";
+    source = "${pkgs.beep}/bin/beep";
+    permissions = "u+rs,g+rs,o+rx";
+  };
+
   systemd.services.boot-beep = {
     description = "Beep when system is ready for SSH";
     after = [
