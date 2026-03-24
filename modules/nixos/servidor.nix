@@ -96,12 +96,13 @@ in
       samba = {
         enable = true;
         securityType = "user";
-        extraConfig = ''
-          workgroup = WORKGROUP
-          server string = Servidor NixOS
-          map to guest = never
-        '';
-        shares = {
+        openFirewall = false; # Ya lo manejamos manualmente arriba
+        settings = {
+          global = {
+            workgroup = "WORKGROUP";
+            "server string" = "Servidor NixOS";
+            "map to guest" = "never";
+          };
           archivos = {
             path = "/srv/archivos";
             browseable = "yes";
