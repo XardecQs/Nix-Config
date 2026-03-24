@@ -95,10 +95,10 @@ in
       # Servidor de Archivos
       samba = {
         enable = true;
-        securityType = "user";
         openFirewall = false; # Ya lo manejamos manualmente arriba
         settings = {
           global = {
+            security = "user";
             workgroup = "WORKGROUP";
             "server string" = "Servidor NixOS";
             "map to guest" = "never";
