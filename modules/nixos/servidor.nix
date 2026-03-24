@@ -14,7 +14,7 @@ in
 
   config = lib.mkIf config.modulos.${category}.${moduleName}.enable {
 
-    # 1. RED Y FIREWALL
+    # ===== 1. RED Y FIREWALL =====
     networking = {
       interfaces.enp3s0.ipv4.addresses = [
         {
@@ -34,6 +34,7 @@ in
           22 # SSH
           445 # Samba SMB
           139 # Samba NetBIOS
+          5212 # Cloudreve
         ];
         allowedUDPPorts = [
           137
@@ -43,7 +44,7 @@ in
       };
     };
 
-    # 2. GESTIÓN DE ENERGÍA Y DISCO
+    # ===== 2. GESTIÓN DE ENERGÍA Y DISCO =====
     services = {
       auto-cpufreq = {
         enable = true;
@@ -72,7 +73,7 @@ in
       };
     };
 
-    # 3. ACCESO Y DESCUBRIMIENTO (SSH, Samba, Avahi)
+    # ===== 3. ACCESO Y DESCUBRIMIENTO (SSH, Samba, Avahi) =====
     services = {
       openssh = {
         enable = true;
@@ -95,7 +96,7 @@ in
       # Servidor de Archivos
       samba = {
         enable = true;
-        openFirewall = false; # Ya lo manejamos manualmente arriba
+        openFirewall = false;
         settings = {
           global = {
             security = "user";
@@ -116,14 +117,55 @@ in
       };
     };
 
-    # 4. VIRTUALIZACIÓN (Motor)
-    virtualisation.podman = {
-      enable = true;
-      dockerCompat = true;
-      defaultNetwork.settings.dns_enabled = true;
+    # ===== 4. VIRTUALIZACIÓN (Podman + Cloudreve) =====
+    virtualisation = {
+      podman = {
+        enable = true;
+        dockerCompat = true;
+        defaultNetwork.settings.dns_enabled = true;
+      };
+
+      oci-containers.backend = "podman";
+      oci-containers.containers = {
+        # Cloudreve (Gestor de archivos web)
+        cloudreve = {
+          image = "cloudreve/cloudreve:latest";
+          ports = [ "5212:5212" ];
+          volumes = [
+            "/srv/cloudreve/uploads:/cloudreve/uploads:rw"
+            "/srv/cloudreve/conf:/cloudreve/conf:rw"
+            "/srv/cloudreve/db:/cloudreve/conf/db:rw"
+            "/srv/cloudreve/avatar:/cloudreve/conf/avatar:rw"
+          ];
+          dependsOn = [ "aria2" ];
+          extraOptions = [
+            "--restart=always"
+            "--network=host"
+          ];
+        };
+
+        # Aria2 (Para descargas offline en Cloudreve)
+        aria2 = {
+          image = "p3terx/aria2-pro:latest";
+          ports = [ "6800:6800" ];
+          volumes = [
+            "/srv/cloudreve/uploads:/data:rw"
+            "/srv/aria2/config:/config:rw"
+          ];
+          environment = {
+            PUID = "0";
+            PGID = "0";
+            RPC_SECRET = "cloudreve-aria2-secret"; # Cambia esto por algo seguro
+          };
+          extraOptions = [
+            "--restart=always"
+            "--network=host"
+          ];
+        };
+      };
     };
 
-    # 5. PAQUETES Y UTILIDADES
+    # ===== 5. PAQUETES Y UTILIDADES =====
     environment.systemPackages = with pkgs; [
       htop
       powertop
@@ -132,12 +174,20 @@ in
       pciutils
     ];
 
-    # 6. AUTOMATIZACIÓN Y DIRECTORIOS
+    # ===== 6. DIRECTORIOS =====
     systemd.tmpfiles.rules = [
       "d /srv/archivos 0755 root users -"
       "d /srv/config 0755 root users -"
+      "d /srv/cloudreve 0755 root users -"
+      "d /srv/cloudreve/uploads 0755 root users -"
+      "d /srv/cloudreve/conf 0755 root users -"
+      "d /srv/cloudreve/db 0755 root users -"
+      "d /srv/cloudreve/avatar 0755 root users -"
+      "d /srv/aria2 0755 root users -"
+      "d /srv/aria2/config 0755 root users -"
     ];
 
+    # ===== 7. BEEP DE ARRANQUE =====
     security.wrappers.beep = {
       owner = "root";
       group = "wheel";
