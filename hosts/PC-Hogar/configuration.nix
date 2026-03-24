@@ -49,7 +49,7 @@
   #/--------------------/ Boot /--------------------/#
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_lts;
+    kernelPackages = pkgs.linuxPackages;
     loader = {
       timeout = 0;
       systemd-boot = {
