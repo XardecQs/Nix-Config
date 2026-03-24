@@ -20,7 +20,7 @@
       "sd_mod"
       "sr_mod"
     ];
-    initrd.kernelModules = [ ];
+    initrd.kernelModules = [ "pcspkr" ];
     kernelModules = [ "pcspkr" ];
     extraModulePackages = [ ];
   };
