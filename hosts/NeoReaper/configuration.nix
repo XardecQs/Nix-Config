@@ -86,6 +86,13 @@
         "Media"
         "Juegos"
         "Proyectos"
+        ".config/GitHub Desktop"
+        ".local/share/gvfs-metadata"
+        ".local/share/keyrings"
+        ".config/btop"
+      ];
+      files = [
+        ".config/mimeapps.list"
       ];
     };
   };
