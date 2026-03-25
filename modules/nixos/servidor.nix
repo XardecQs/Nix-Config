@@ -129,28 +129,8 @@ in
 
       oci-containers.backend = "podman";
       oci-containers.containers = {
-        # Cloudreve (Gestor de archivos web)
-        cloudreve = {
-          image = "cloudreve/cloudreve:latest";
-          ports = [ "5212:5212" ];
-          volumes = [
-            "/srv/cloudreve/uploads:/cloudreve/uploads:rw"
-            "/srv/cloudreve/conf:/cloudreve/conf:rw"
-            "/srv/cloudreve/db:/cloudreve/conf/db:rw"
-            "/srv/cloudreve/avatar:/cloudreve/conf/avatar:rw"
-          ];
-          dependsOn = [ "aria2" ];
-          extraOptions = [
-            "--restart=always"
-            "--network=host"
-          ];
-          autoStart = true;
-        };
-
-        # Aria2 (Para descargas offline en Cloudreve)
         aria2 = {
           image = "p3terx/aria2-pro:latest";
-          ports = [ "6800:6800" ];
           volumes = [
             "/srv/cloudreve/uploads:/data:rw"
             "/srv/aria2/config:/config:rw"
@@ -158,8 +138,25 @@ in
           environment = {
             PUID = "0";
             PGID = "0";
-            RPC_SECRET = "cloudreve-aria2-secret"; # Cambia esto por algo seguro
+            UMASK_SET = "022";
+            RPC_SECRET = "cloudreve-aria2-secret";
           };
+          extraOptions = [
+            "--restart=always"
+            "--network=host"
+          ];
+          autoStart = true;
+        };
+
+        cloudreve = {
+          image = "cloudreve/cloudreve:latest";
+          volumes = [
+            "/srv/cloudreve/uploads:/cloudreve/uploads:rw"
+            "/srv/cloudreve/conf:/cloudreve/conf:rw"
+            "/srv/cloudreve/db:/cloudreve/conf/db:rw"
+            "/srv/cloudreve/avatar:/cloudreve/conf/avatar:rw"
+          ];
+          dependsOn = [ "aria2" ];
           extraOptions = [
             "--restart=always"
             "--network=host"
