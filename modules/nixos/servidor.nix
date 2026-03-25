@@ -141,10 +141,8 @@ in
             UMASK_SET = "022";
             RPC_SECRET = "cloudreve-aria2-secret";
           };
-          extraOptions = [
-            "--restart=always"
-            "--network=host"
-          ];
+          extraOptions = [ "--network=host" ];
+          restartPolicy = "always";
           autoStart = true;
         };
 
@@ -157,10 +155,8 @@ in
             "/srv/cloudreve/avatar:/cloudreve/conf/avatar:rw"
           ];
           dependsOn = [ "aria2" ];
-          extraOptions = [
-            "--restart=always"
-            "--network=host"
-          ];
+          extraOptions = [ "--network=host" ];
+          restartPolicy = "always";
           autoStart = true;
         };
       };
