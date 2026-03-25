@@ -233,11 +233,13 @@ in
     };
 
     # ===== BOTÓN DE ENCENDIDO PARA APAGADO GRACEFUL =====
-    services.logind.extraConfig = ''
-      # Presión corta del botón de poder = apagado seguro
-      HandlePowerKey=poweroff
-      # Presión larga (5s) = forzoso (último recurso)
-      PowerKeyIgnoreInhibited=no
-    '';
+    services.logind.settings = {
+      Login = {
+        # Presión corta del botón de poder = apagado seguro
+        HandlePowerKey = "poweroff";
+        # Presión larga (5s) = forzoso (último recurso)
+        PowerKeyIgnoreInhibited = "no";
+      };
+    };
   };
 }
