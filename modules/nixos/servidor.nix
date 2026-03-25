@@ -142,7 +142,6 @@ in
             RPC_SECRET = "cloudreve-aria2-secret";
           };
           extraOptions = [ "--network=host" ];
-          restartPolicy = "always";
           autoStart = true;
         };
 
@@ -156,7 +155,6 @@ in
           ];
           dependsOn = [ "aria2" ];
           extraOptions = [ "--network=host" ];
-          restartPolicy = "always";
           autoStart = true;
         };
       };
