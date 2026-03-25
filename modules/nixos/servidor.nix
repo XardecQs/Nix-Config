@@ -149,9 +149,8 @@ in
           image = "cloudreve/cloudreve:latest";
           volumes = [
             "/srv/cloudreve/uploads:/cloudreve/uploads:rw"
+            "/srv/cloudreve/data:/cloudreve/data:rw"
             "/srv/cloudreve/conf:/cloudreve/conf:rw"
-            "/srv/cloudreve/db:/cloudreve/conf/db:rw"
-            "/srv/cloudreve/avatar:/cloudreve/conf/avatar:rw"
           ];
           dependsOn = [ "aria2" ];
           extraOptions = [ "--network=host" ];
@@ -176,8 +175,7 @@ in
       "d /srv/cloudreve 0755 root users -"
       "d /srv/cloudreve/uploads 0755 root users -"
       "d /srv/cloudreve/conf 0755 root users -"
-      "d /srv/cloudreve/db 0755 root users -"
-      "d /srv/cloudreve/avatar 0755 root users -"
+      "d /srv/cloudreve/data 0755 root users -"
       "d /srv/aria2 0755 root users -"
       "d /srv/aria2/config 0755 root users -"
     ];
