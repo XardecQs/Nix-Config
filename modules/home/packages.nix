@@ -52,9 +52,8 @@ in
       # Multimedia
       #krita
       #inkscape
-      #ffmpegthumbnailer
       #unstable.audacity
-      #unstable.libresprite
+      unstable.libresprite
       #blender
       #losslesscut-bin
       #cava

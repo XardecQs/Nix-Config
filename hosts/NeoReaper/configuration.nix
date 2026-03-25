@@ -91,9 +91,13 @@
         ".local/share/keyrings"
         ".config/btop"
         ".local/share/zoxide"
+        "Trastero"
+        ".themes"
+        ".config/libresprite"
       ];
       files = [
         ".config/mimeapps.list"
+        ".config/background"
       ];
     };
   };

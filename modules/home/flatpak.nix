@@ -8,12 +8,16 @@
         enable = true;
         packages = [
           "com.github.tchx84.Flatseal"
+          "org.gtk.Gtk3theme.adw-gtk3"
           #"com.github.johnfactotum.Foliate"
           "app.zen_browser.zen"
           #"md.obsidian.Obsidian"
           #"net.blockbench.Blockbench"
-          #"io.gitlab.adhami3310.Converter"
-          #"org.nickvision.tubeconverter"
+          "io.gitlab.adhami3310.Converter"
+          "fr.handbrake.ghb"
+          "org.nickvision.tubeconverter"
+          "org.musicbrainz.Picard"
+          "org.soundconverter.SoundConverter"
           #"org.kde.kdenlive"
           #"com.github.neithern.g4music"
           #"com.rtosta.zapzap"

@@ -29,6 +29,7 @@
       gnome-extension-manager
       dconf-editor
       nautilus-python
+      ffmpegthumbnailer
 
       adw-gtk3
       marble-shell-theme
