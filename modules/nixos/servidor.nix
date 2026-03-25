@@ -214,5 +214,30 @@ in
         ${pkgs.beep}/bin/beep -f 1000 -l 200 -r 3 -D 100 2>/dev/null || true
       '';
     };
+
+    systemd.services.cloudreve-start = {
+      description = "Start Cloudreve containers";
+      after = [
+        "podman.service"
+        "network-online.target"
+      ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.podman}/bin/podman start cloudreve";
+        ExecStop = "${pkgs.podman}/bin/podman stop cloudreve";
+      };
+    };
+
+    # ===== BOTÓN DE ENCENDIDO PARA APAGADO GRACEFUL =====
+    services.logind.extraConfig = ''
+      # Presión corta del botón de poder = apagado seguro
+      HandlePowerKey=poweroff
+      # Presión larga (5s) = forzoso (último recurso)
+      PowerKeyIgnoreInhibited=no
+    '';
   };
 }
