@@ -238,7 +238,7 @@ in
         # Presión corta del botón de poder = apagado seguro
         HandlePowerKey = "poweroff";
         # Presión larga (5s) = forzoso (último recurso)
-        PowerKeyIgnoreInhibited = "no";
+        PowerKeyIgnoreInhibited = "yes";
       };
     };
   };
