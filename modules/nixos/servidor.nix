@@ -35,6 +35,7 @@ in
           445 # Samba SMB
           139 # Samba NetBIOS
           5212 # Cloudreve
+          8096
         ];
         allowedUDPPorts = [
           137
@@ -156,6 +157,20 @@ in
           extraOptions = [ "--network=host" ];
           autoStart = true;
         };
+
+        jellyfin = {
+          image = "jellyfin/jellyfin:latest";
+          volumes = [
+            "/srv/jellyfin/config:/config:rw"
+            "/srv/jellyfin/cache:/cache:rw"
+            "/srv/archivos:/media:ro"
+          ];
+          extraOptions = [
+            "--network=host"
+            "--device=/dev/dri/renderD128:/dev/dri/renderD128"
+          ];
+          autoStart = true;
+        };
       };
     };
 
@@ -178,6 +193,9 @@ in
       "d /srv/cloudreve/data 0755 root users -"
       "d /srv/aria2 0755 root users -"
       "d /srv/aria2/config 0755 root users -"
+      "d /srv/jellyfin 0755 root users -"
+      "d /srv/jellyfin/config 0755 root users -"
+      "d /srv/jellyfin/cache 0755 root users -"
     ];
 
     # ===== 7. BEEP DE ARRANQUE =====
